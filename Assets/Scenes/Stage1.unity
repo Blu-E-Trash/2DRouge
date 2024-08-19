@@ -2853,7 +2853,7 @@ GameObject:
   - component: {fileID: 622611099}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2897,7 +2897,7 @@ MonoBehaviour:
     m_Bits: 256
   mobMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   rb: {fileID: 1729394827}
   playerSpriteRenderer: {fileID: 1729394830}
   moveEffect: {fileID: 1512311450}

@@ -7,7 +7,7 @@ public class PlayerMove : MonoBehaviour
 {
     //이동
     public float movePower;     //이속
-    public float jumpPower;     //점프력
+
     private bool isMove;
     //대쉬
     public float dashForce = 20f;
@@ -16,11 +16,9 @@ public class PlayerMove : MonoBehaviour
     private bool isDash = false;
     private float dashTimeLeft;
     private float lastDashTime;
-    [SerializeField]
-    private bool OnGround;
-    private bool AirJump;
 
-    public LayerMask Mask;
+
+
     public LayerMask mobMask;
 
     [SerializeField]
@@ -32,7 +30,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField]
     Animator animator;
     [SerializeField]
-    Collider2D Playercollider2D;
+    public Collider2D Playercollider2D;
 
     EnemyHp enemyHp;
 
@@ -41,24 +39,13 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         movePower = 5f;
-        jumpPower = 5f;
+
     }
     private void Update()
     {
-        GroundCheck();
+
         //점프
-        if (Input.GetButtonDown("JumpC"))
-        {
-            if (OnGround)
-            {
-                rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-            }
-            if (!AirJump)
-            {
-                rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-                AirJump = false;
-            }
-        }
+
         //공격
         if (Input.GetButtonDown("Attack"))
         {
@@ -153,31 +140,5 @@ public class PlayerMove : MonoBehaviour
 
         this.transform.position += moveVelocity * movePower * Time.deltaTime;
     }
-    private void GroundCheck()
-    {
-        float RayLength = Playercollider2D.bounds.center.y-Playercollider2D.bounds.min.y+0.05f;
-        RaycastHit2D hit = Physics2D.Raycast(Playercollider2D.bounds.center, Vector2.down,RayLength,Mask);
-        if (hit.collider != null)
-        {
-            Debug.Log(hit.transform.gameObject);
-            OnGround = true;
-            AirJump = true;
-            return;
-        }
-        hit = Physics2D.Raycast(new Vector2(Playercollider2D.bounds.center.x - Playercollider2D.bounds.min.x+0.001f,Playercollider2D.bounds.center.y), Vector2.down, RayLength, Mask);
-        if (hit.collider != null)
-        {
-            OnGround = true;
-            AirJump = true;
-            return;
-        }
-        hit = Physics2D.Raycast(new Vector2(Playercollider2D.bounds.max.x - Playercollider2D.bounds.center.x - 0.001f, Playercollider2D.bounds.center.y), Vector2.down, RayLength, Mask);
-        if (hit.collider != null)
-        {
-            OnGround = true;
-            AirJump = true;
-            return;
-        }
-        OnGround = false;
-    }
+  
 }

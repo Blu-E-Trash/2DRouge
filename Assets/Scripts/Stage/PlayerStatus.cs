@@ -21,10 +21,6 @@ public class PlayerStatus : MonoBehaviour
     
     private int gold;       
 
-    private bool beAttacked;
-    PlayingUI playingUI;
-
-
     public void Awake()
     {
         gold = 100;
@@ -32,15 +28,11 @@ public class PlayerStatus : MonoBehaviour
         hp = GetComponent<Image>();
         characterImage = GetComponent<Image>();
     }
-    private void HpImage()
+    public void UpgradeClass()
     {
-        if (beAttacked)
+        if (gold>1000)
         {
-            Hp--;
+            
         }
-    }
-    private void ClassUpgrade()
-    {
-        characterImage = UpgradedClass;
     }
 }
