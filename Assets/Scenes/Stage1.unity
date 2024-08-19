@@ -1505,7 +1505,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainInventory: {fileID: 1085246678}
   itemExplain: {fileID: 235472033}
-  ItemImage: {fileID: 981524803}
+  ExItemImage: {fileID: 981524803}
+  ExItemNameText: {fileID: 1434032094}
+  ExItemDescriptionText: {fileID: 1153337172}
+  ExItemText: {fileID: 1406657737}
 --- !u!114 &307031609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1518,10 +1521,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d95ca1b2faf955c40bcd84a1d78f6639, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ExItemImage: {fileID: 981524803}
-  ExItemNameText: {fileID: 1434032094}
-  ExItemDescriptionText: {fileID: 1153337172}
-  ExItemText: {fileID: 1406657737}
 --- !u!1 &323985577
 GameObject:
   m_ObjectHideFlags: 0
@@ -2266,10 +2265,10 @@ MonoBehaviour:
       - m_Target: {fileID: 307031608}
         m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
         m_MethodName: ItemExplainFunction
-        m_Mode: 5
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 505281051}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2429,10 +2428,10 @@ MonoBehaviour:
       - m_Target: {fileID: 307031608}
         m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
         m_MethodName: ItemExplainFunction
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 516431178}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2749,10 +2748,10 @@ MonoBehaviour:
       - m_Target: {fileID: 307031608}
         m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
         m_MethodName: ItemExplainFunction
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 600149137}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4486,10 +4485,10 @@ MonoBehaviour:
       - m_Target: {fileID: 307031608}
         m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
         m_MethodName: ItemExplainFunction
-        m_Mode: 5
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1025496185}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5200,10 +5199,10 @@ MonoBehaviour:
       - m_Target: {fileID: 307031608}
         m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
         m_MethodName: ItemExplainFunction
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1068004263}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5491,7 +5490,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uACE0\uB300 \uB8EC\uC774 \uC0C8\uACA8\uC9C4 \uB3CC\uCABC\uAC00\uB9AC"
+  m_Text: 0000000000
 --- !u!222 &1153337173
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6064,7 +6063,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uACF5/\uB9C8 +10%"
+  m_Text: 0000000000000
 --- !u!222 &1406657738
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6200,7 +6199,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB8EC\uC2A4\uD1A4"
+  m_Text: 00000000000
 --- !u!222 &1434032095
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6953,10 +6952,10 @@ MonoBehaviour:
       - m_Target: {fileID: 307031608}
         m_TargetAssemblyTypeName: InventoryUI, Assembly-CSharp
         m_MethodName: ItemExplainFunction
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 1638581756}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

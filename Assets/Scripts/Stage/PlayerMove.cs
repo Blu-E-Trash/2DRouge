@@ -157,7 +157,7 @@ public class PlayerMove : MonoBehaviour
     {
         float RayLength = Playercollider2D.bounds.center.y-Playercollider2D.bounds.min.y+0.05f;
         RaycastHit2D hit = Physics2D.Raycast(Playercollider2D.bounds.center, Vector2.down,RayLength,Mask);
-        if (hit != null)
+        if (hit.collider != null)
         {
             Debug.Log(hit.transform.gameObject);
             OnGround = true;
@@ -165,14 +165,14 @@ public class PlayerMove : MonoBehaviour
             return;
         }
         hit = Physics2D.Raycast(new Vector2(Playercollider2D.bounds.center.x - Playercollider2D.bounds.min.x+0.001f,Playercollider2D.bounds.center.y), Vector2.down, RayLength, Mask);
-        if (hit != null)
+        if (hit.collider != null)
         {
             OnGround = true;
             AirJump = true;
             return;
         }
         hit = Physics2D.Raycast(new Vector2(Playercollider2D.bounds.max.x - Playercollider2D.bounds.center.x - 0.001f, Playercollider2D.bounds.center.y), Vector2.down, RayLength, Mask);
-        if (hit != null)
+        if (hit.collider != null)
         {
             OnGround = true;
             AirJump = true;

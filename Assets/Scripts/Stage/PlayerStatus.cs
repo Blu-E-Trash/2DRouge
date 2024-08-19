@@ -21,7 +21,6 @@ public class PlayerStatus : MonoBehaviour
     
     private int gold;       
 
-
     private bool beAttacked;
     PlayingUI playingUI;
 

@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class CharacterStatus : MonoBehaviour
 {
-    SelectCharacter selectCharacter;
-
-    private void Awake()
+   private void Awake()
     {
 
     }
