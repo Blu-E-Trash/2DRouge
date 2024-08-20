@@ -32,6 +32,7 @@ public class EnemyHp : MonoBehaviour
             {
                 animator.SetBool("Dead", true);
                 mobCount--;
+                playerStatus.gold += 15;
             }
         }
         

@@ -7,8 +7,6 @@ public class PlayerMove : MonoBehaviour
 {
     //이동
     public float movePower;     //이속
-
-    private bool isMove;
     //대쉬
     public float dashForce = 20f;
     public float dashDuration = 0.1f;
@@ -17,20 +15,15 @@ public class PlayerMove : MonoBehaviour
     private float dashTimeLeft;
     private float lastDashTime;
 
-
-
     public LayerMask mobMask;
 
-    [SerializeField]
-    Rigidbody2D rb;
-    [SerializeField]
-    SpriteRenderer playerSpriteRenderer;
+    public Rigidbody2D rb;
+    Animator animator;
+    public Collider2D Playercollider2D;
+
     [SerializeField]
     ParticleSystem moveEffect;
-    [SerializeField]
-    Animator animator;
-    [SerializeField]
-    public Collider2D Playercollider2D;
+
 
     EnemyHp enemyHp;
 
@@ -39,13 +32,12 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         movePower = 5f;
-
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        Playercollider2D = GetComponent<Collider2D>();
     }
     private void Update()
-    {
-
-        //점프
-
+    { 
         //공격
         if (Input.GetButtonDown("Attack"))
         {
@@ -99,7 +91,6 @@ public class PlayerMove : MonoBehaviour
                 if (collider.CompareTag("Mob"))
                     enemyHp.mobDamaged();
             }
-
         }
     }
     private void Move()
@@ -109,9 +100,8 @@ public class PlayerMove : MonoBehaviour
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
             animator.SetTrigger("doMove");
-            isMove = true;
             moveVelocity = Vector3.left;
-            this.transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(-1, 1, 1);
             if (!moveEffect.isPlaying)
             {
                 moveEffect.Play();
@@ -120,9 +110,8 @@ public class PlayerMove : MonoBehaviour
         else if (Input.GetAxisRaw("Horizontal") > 0)
         {
             animator.SetTrigger("doMove");
-            isMove = true;
             moveVelocity = Vector3.right;
-            this.transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = new Vector3(1, 1, 1);
             if (!moveEffect.isPlaying)
             {
                 moveEffect.Play();
@@ -131,7 +120,6 @@ public class PlayerMove : MonoBehaviour
         else if (Input.GetButtonUp("Horizontal"))
         {
             animator.SetTrigger("doStop");
-            isMove = false;
             if (moveEffect.isPlaying)
             {
                 moveEffect.Stop();

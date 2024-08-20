@@ -2,76 +2,69 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
-public class Jump : MonoBehaviour
+public class Jump : PlayerMove
 {
     public float jumpPower;     //점프력
-
+    private float scaleX;
+    
+    private Vector2 StartPoint;
     [SerializeField]
-    private bool OnGround;
-    private bool AirJump;
+    private int jumpCount;
 
     public LayerMask Mask;
 
-    Rigidbody2D rb2D;
-
-    PlayerMove playerMove;
     void Start()
     {
         jumpPower = 5f;
+        jumpCount = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        scaleX = transform.localScale.x;
+
         GroundCheck();
+
         if (Input.GetButtonDown("JumpC"))
         {
-            if (OnGround)
-            {
-                rb2D.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-            }
-            if (!AirJump)
-            {
-                rb2D.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-                AirJump = false;
-            }
+            JumpAction();
+        }
+    }
+    private void JumpAction()
+    { 
+        if (jumpCount == 0)
+        {//1단점프
+            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpCount=1;
+        }
+        if (jumpCount == 1)
+        {//2단점프
+            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpCount=2;
         }
     }
     private void GroundCheck()
     {
-        float RayLength = playerMove.Playercollider2D.bounds.center.y - playerMove.Playercollider2D.bounds.min.y + 0.05f;
-        RaycastHit2D hit = Physics2D.Raycast(playerMove.Playercollider2D.bounds.center, Vector2.down, RayLength, Mask);
-        if (playerMove.transform.localScale.x < 0)
+        float RayLength = 0.3f;
+        if (scaleX == -1)//왼쪽을 보는중
         {
-            hit = Physics2D.Raycast(new Vector2(playerMove.Playercollider2D.bounds.max.x - playerMove.Playercollider2D.bounds.center.x - 0.001f, playerMove.Playercollider2D.bounds.center.y), Vector2.down, RayLength, Mask);
-            if (hit.collider != null)
-            {
-                OnGround = true;
-                AirJump = true;
-                return;
-            }
+            StartPoint = new Vector2(Playercollider2D.bounds.center.x + Playercollider2D.bounds.extents.x, Playercollider2D.bounds.min.y);
         }
-        else if (playerMove.transform.localScale.x > 0)
+
+        else if (scaleX == 1)
         {
-            hit = Physics2D.Raycast(new Vector2(playerMove.Playercollider2D.bounds.center.x - playerMove.Playercollider2D.bounds.min.x + 0.001f, playerMove.Playercollider2D.bounds.center.y), Vector2.down, RayLength, Mask);
-            if (hit.collider != null)
-            {
-                OnGround = true;
-                AirJump = true;
-                return;
-            }
+            StartPoint = new Vector2(Playercollider2D.bounds.center.x - Playercollider2D.bounds.extents.x, Playercollider2D.bounds.min.y);
         }
-        else
-        {
-            if (hit.collider != null)
-            {
-                Debug.Log(hit.transform.gameObject);
-                OnGround = true;
-                AirJump = true;
-                return;
-            }
+        Debug.DrawRay(StartPoint, Vector2.down * RayLength, Color.red); // 디버그 레이
+        RaycastHit2D hit = Physics2D.Raycast(StartPoint, Vector2.down, RayLength, Mask);
+
+        if(hit.collider != null)
+        {//땅에 있을떄
+            Debug.Log(hit.collider);
+            jumpCount = 0;
         }
-        OnGround = false;
     }
 }

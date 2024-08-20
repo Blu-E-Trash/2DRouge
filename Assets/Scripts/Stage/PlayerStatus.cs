@@ -19,7 +19,7 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] 
     private int Hp;           //Ã¼·Â
     
-    private int gold;       
+    public int gold;       
 
     public void Awake()
     {
@@ -35,4 +35,5 @@ public class PlayerStatus : MonoBehaviour
             
         }
     }
+    
 }
