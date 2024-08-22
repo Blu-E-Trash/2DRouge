@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using UnityEngine;
 
-public class Attack : PlayerMove
+public class Attack : MonoBehaviour
 {
     EnemyHp enemyHp;
 
@@ -11,6 +11,7 @@ public class Attack : PlayerMove
     public float coolTime = 0.5f;
     public Transform pos;
     public Vector2 boxSize;
+    public Animator animator;
 
     public LayerMask mobMask;
 

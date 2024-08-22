@@ -8,16 +8,16 @@ public class PlayerMove : MonoBehaviour
     //이동
     public float movePower;     //이속
     //대쉬
-    public float dashForce = 20f;
-    public float dashDuration = 0.1f;
+    protected float dashForce = 20f;
+    protected float dashDuration = 0.1f;
     public float dashCooldown = 3f;
     private bool isDash = false;
     private float dashTimeLeft;
     private float lastDashTime;
 
-    public Rigidbody2D rb;
+    protected Rigidbody2D rb;
     protected Animator animator;
-    public Collider2D Playercollider2D;
+    protected Collider2D Playercollider2D;
     SpriteRenderer render;
 
     Vector3 leftV = new Vector3(-1, 1, 1);

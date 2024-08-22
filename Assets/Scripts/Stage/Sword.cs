@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Sword : PlayerStatus
 {
     PlayerMove playerMove;
+    Text CharacterEx;
     new void Start()
     {
         maxHp = 6;
@@ -14,10 +16,11 @@ public class Sword : PlayerStatus
         CritPer = 20;
         CritDam = 150;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (UpgradCount != 0)
+        {
+            CharacterEx.text = "정식 기사";
+        }
     }
 }

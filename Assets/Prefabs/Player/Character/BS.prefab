@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6383026820365884910}
   m_Layer: 6
-  m_Name: Attack
+  m_Name: AttackRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1119842757273561773}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.17, y: 0.43, z: 0}
+  m_LocalPosition: {x: 0.36, y: 0.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40,10 +40,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5822260344825245674}
-  - component: {fileID: 6804958804223894905}
   - component: {fileID: 8193237346940618598}
+  - component: {fileID: 4643598080732112946}
+  - component: {fileID: 6804958804223894905}
   - component: {fileID: 5079280028670335645}
-  - component: {fileID: 8039916303159872346}
   - component: {fileID: 6942319556966286350}
   - component: {fileID: 5788508210673554899}
   - component: {fileID: 6651559773847711916}
@@ -72,31 +72,6 @@ Transform:
   - {fileID: 6383026820365884910}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6804958804223894905
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4294203957125512626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 215ed882366bab64dbf7bf85080f38a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movePower: 0
-  dashForce: 20
-  dashDuration: 0.1
-  dashCooldown: 3
-  rb: {fileID: 6072559672822890054}
-  Playercollider2D: {fileID: 6651559773847711916}
-  moveEffect: {fileID: 8809723502464069103}
-  coolTime: 0.5
-  pos: {fileID: 5822260344825245674}
-  boxSize: {x: 0, y: 0}
-  mobMask:
-    serializedVersion: 2
-    m_Bits: 128
 --- !u!114 &8193237346940618598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,12 +85,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movePower: 5
-  dashForce: 20
-  dashDuration: 0.1
   dashCooldown: 3
-  rb: {fileID: 6072559672822890054}
-  Playercollider2D: {fileID: 6651559773847711916}
   moveEffect: {fileID: 8809723502464069103}
+--- !u!114 &4643598080732112946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294203957125512626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a573a9fbd71c824c82dab03290d7997, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goldText: {fileID: 0}
+  systemMassage: {fileID: 0}
+  SystemMassageGO: {fileID: 0}
+  CharacterEx: {fileID: 0}
+  Damage: 100
+  maxHp: 6
+  Hp: 6
+  CritPer: 20
+  CritDam: 150
+  gold: 10000
+  characterImage: {fileID: 0}
+  UIcharacterImage: {fileID: 0}
+  UpgradedClass: {fileID: 4545135470104253956, guid: 3765a367fb48f9040bca18add088d6d3, type: 3}
+  UpgradedClassUI: {fileID: 4545135470104253956, guid: 3765a367fb48f9040bca18add088d6d3, type: 3}
+--- !u!114 &6804958804223894905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294203957125512626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 215ed882366bab64dbf7bf85080f38a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolTime: 0.5
+  pos: {fileID: 6383026820365884910}
+  boxSize: {x: 0.8, y: 1}
+  animator: {fileID: 0}
+  mobMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &5079280028670335645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,36 +144,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94da3e63f7f88f343806f2a773a00575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movePower: 0
-  dashForce: 20
-  dashDuration: 0.1
+  movePower: 5
   dashCooldown: 3
-  rb: {fileID: 6072559672822890054}
-  Playercollider2D: {fileID: 6651559773847711916}
   moveEffect: {fileID: 8809723502464069103}
   jumpPower: 5
   jumpCount: 0
   Mask:
     serializedVersion: 2
     m_Bits: 256
---- !u!114 &8039916303159872346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4294203957125512626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6be752d9d2fb1144f802d06ba93afdd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  goldText: {fileID: 0}
-  systemMassage: {fileID: 0}
-  SystemMassageGO: {fileID: 0}
-  characterImage: {fileID: 0}
-  Damage: 100
-  gold: 0
 --- !u!212 &6942319556966286350
 SpriteRenderer:
   m_ObjectHideFlags: 0

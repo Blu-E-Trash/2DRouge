@@ -5,15 +5,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerStatus : MonoBehaviour
-{ 
+{
+    [SerializeField]
     public Text goldText;           //얼마 있는지 확인
+    [SerializeField]
     public Text systemMassage;
+    [SerializeField]
     public GameObject SystemMassageGO;
     [SerializeField]
     public Image characterImage; //캐릭터 초상화
-    private Image UpgradedClass; //업글 후의 초상화
+    [SerializeField]
+    public Image UIcharacterImage;
+    public Sprite UpgradedClass; //업글 후의 초상화
 
-    private bool Upgraded;
+    protected int UpgradCount;
 
     public float Damage;       //공격력
     public int maxHp;           //최대채력
@@ -29,6 +34,7 @@ public class PlayerStatus : MonoBehaviour
         SystemMassageGO.SetActive(false);
         gold = 100;
         goldText.text = gold.ToString();
+        UpgradCount = 0;
     }
     private void Update()
     {
@@ -36,14 +42,18 @@ public class PlayerStatus : MonoBehaviour
     }
     public void UpgradeClass()
     {
-        if (gold>=1000 && !Upgraded)
+        if (UpgradCount<1 && gold >= 1000)
         {
             gold -= 1000;
-            characterImage.sprite = UpgradedClass.sprite;
+            UpgradCount += 1;
+            characterImage.sprite = UpgradedClass;
+            UIcharacterImage.sprite = UpgradedClass;
             Damage = Damage + 20;
+            maxHp += 2;
             Hp += 2;
+            CritDam += 30;
+            CritPer += 20;
             playerMove.dashCooldown -= 1;
-            Upgraded = true;
         }
         else if (gold < 1000)
         {
@@ -52,7 +62,7 @@ public class PlayerStatus : MonoBehaviour
             Invoke("Out", 2f);
 
         }
-        else if (Upgraded)
+        else if (UpgradCount!=0)
         {
             SystemMassageGO.SetActive(true);
             systemMassage.text = "이미 승급했습니다.";

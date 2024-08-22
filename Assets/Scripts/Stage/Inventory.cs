@@ -11,6 +11,7 @@ public class Inventory : MonoBehaviour
     public int maxSlots = 6; // 최대 슬롯 개수
 
     private InventorySlots inventorySlots;
+
     private PlayerStatus playerStatus;
 
     private void Awake()

@@ -27,7 +27,6 @@ public class InventoryUI : MonoBehaviour
     public Text ExItemText; // 아이템의 효과 텍스트
 
     private Image ItemImage;            //메인 인밴토리의 아이템 이미지
-    public Inventory inventory;        // 인벤토리 스크립트
 
     private bool maintrue;
     private bool itemExTrue;
