@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Archor : PlayerStatus
 {
-    // Start is called before the first frame update
-    void Start()
+    PlayerMove playerMove;
+    new void Start()
     {
-        
+        Hp = 3;
+        Damage = 150;
+        playerMove.movePower = 7;
+        CritPer = 40;
+        CritDam = 200;
     }
 
     // Update is called once per frame

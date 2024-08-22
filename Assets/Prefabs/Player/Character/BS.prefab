@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1119842757273561773
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6383026820365884910}
+  m_Layer: 6
+  m_Name: Attack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6383026820365884910
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119842757273561773}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.17, y: 0.43, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5822260344825245674}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4294203957125512626
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,6 +40,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5822260344825245674}
+  - component: {fileID: 6804958804223894905}
+  - component: {fileID: 8193237346940618598}
+  - component: {fileID: 5079280028670335645}
   - component: {fileID: 8039916303159872346}
   - component: {fileID: 6942319556966286350}
   - component: {fileID: 5788508210673554899}
@@ -35,8 +69,77 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8809723502464069097}
+  - {fileID: 6383026820365884910}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6804958804223894905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294203957125512626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 215ed882366bab64dbf7bf85080f38a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movePower: 0
+  dashForce: 20
+  dashDuration: 0.1
+  dashCooldown: 3
+  rb: {fileID: 6072559672822890054}
+  Playercollider2D: {fileID: 6651559773847711916}
+  moveEffect: {fileID: 8809723502464069103}
+  coolTime: 0.5
+  pos: {fileID: 5822260344825245674}
+  boxSize: {x: 0, y: 0}
+  mobMask:
+    serializedVersion: 2
+    m_Bits: 128
+--- !u!114 &8193237346940618598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294203957125512626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91a362fc85433964baf0c1133b5e8e3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movePower: 5
+  dashForce: 20
+  dashDuration: 0.1
+  dashCooldown: 3
+  rb: {fileID: 6072559672822890054}
+  Playercollider2D: {fileID: 6651559773847711916}
+  moveEffect: {fileID: 8809723502464069103}
+--- !u!114 &5079280028670335645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294203957125512626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94da3e63f7f88f343806f2a773a00575, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movePower: 0
+  dashForce: 20
+  dashDuration: 0.1
+  dashCooldown: 3
+  rb: {fileID: 6072559672822890054}
+  Playercollider2D: {fileID: 6651559773847711916}
+  moveEffect: {fileID: 8809723502464069103}
+  jumpPower: 5
+  jumpCount: 0
+  Mask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &8039916303159872346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50,12 +153,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goldText: {fileID: 0}
-  hp: {fileID: 0}
+  systemMassage: {fileID: 0}
+  SystemMassageGO: {fileID: 0}
   characterImage: {fileID: 0}
   Damage: 100
-  Range: 0
-  AttackSpeed: 5
-  Hp: 6
+  gold: 0
 --- !u!212 &6942319556966286350
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -265,5 +367,10 @@ PrefabInstance:
 --- !u!4 &8809723502464069097 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7204429219805006233, guid: 1951194dd6c93b7458a4425b33e87084, type: 3}
+  m_PrefabInstance: {fileID: 1853559919474369648}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8809723502464069103 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7204429219805006239, guid: 1951194dd6c93b7458a4425b33e87084, type: 3}
   m_PrefabInstance: {fileID: 1853559919474369648}
   m_PrefabAsset: {fileID: 0}

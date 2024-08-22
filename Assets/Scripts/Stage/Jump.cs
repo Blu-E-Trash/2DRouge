@@ -20,8 +20,6 @@ public class Jump : PlayerMove
         jumpPower = 5f;
         jumpCount = 0;
     }
-
-    // Update is called once per frame
     void Update()
     {
         scaleX = transform.localScale.x;

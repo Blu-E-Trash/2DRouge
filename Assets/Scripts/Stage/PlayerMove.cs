@@ -10,39 +10,31 @@ public class PlayerMove : MonoBehaviour
     //대쉬
     public float dashForce = 20f;
     public float dashDuration = 0.1f;
-    public float dashCooldown = 4f;
+    public float dashCooldown = 3f;
     private bool isDash = false;
     private float dashTimeLeft;
     private float lastDashTime;
 
-    public LayerMask mobMask;
-
     public Rigidbody2D rb;
-    Animator animator;
+    protected Animator animator;
     public Collider2D Playercollider2D;
+    SpriteRenderer render;
+
+    Vector3 leftV = new Vector3(-1, 1, 1);
+    Vector3 rightV = new Vector3(1, 1, 1);
 
     [SerializeField]
     ParticleSystem moveEffect;
 
-
-    EnemyHp enemyHp;
-
-    private PlayerStatus status;
-
-    private void Awake()
+    protected void Awake()
     {
-        movePower = 5f;
+        render = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         Playercollider2D = GetComponent<Collider2D>();
     }
     private void Update()
     { 
-        //공격
-        if (Input.GetButtonDown("Attack"))
-        {
-            Attack();
-        }
         //대쉬
         if (Input.GetButtonDown("Dash") && !isDash && Time.time >= lastDashTime + dashCooldown)
         {
@@ -68,30 +60,22 @@ public class PlayerMove : MonoBehaviour
         dashTimeLeft = dashDuration;
         lastDashTime = Time.time;
 
-        // 캐릭터가 바라보는 방향 계산 (localScale.x가 양수이면 오른쪽, 음수이면 왼쪽)
-        float dashDirection = transform.localScale.x > 0 ? 1f : -1f;
         animator.SetTrigger("doAttack");//공격모션으로 재생
-        rb.velocity = new Vector2(dashDirection * dashForce, 0f);//(new Vector2(dashDirection * dashForce, 0f), ForceMode2D.Impulse);
-    }
+        if (render.flipX)
+        {
+            rb.velocity = new Vector2((-1) * dashForce, 0f);
+        }
+        else if(!render.flipX) 
+        {
+            rb.velocity = new Vector2(dashForce, 0f);
+        }
 
+    }
     private void EndDash()
     {
         isDash = false;
 
         rb.velocity = new Vector2(0f, rb.velocity.y);
-    }
-    private void Attack()
-    {
-        if (Input.GetButtonDown("Attack"))
-        {
-            Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(new Vector2(transform.position.x, transform.position.y), new Vector2(5, 5), 0, mobMask);
-            animator.SetTrigger("doAttack");
-            foreach (Collider2D collider in collider2Ds)
-            {
-                if (collider.CompareTag("Mob"))
-                    enemyHp.mobDamaged();
-            }
-        }
     }
     private void Move()
     {
@@ -101,7 +85,7 @@ public class PlayerMove : MonoBehaviour
         {
             animator.SetTrigger("doMove");
             moveVelocity = Vector3.left;
-            transform.localScale = new Vector3(-1, 1, 1);
+            render.flipX = true;//transform.localScale = leftV;
             if (!moveEffect.isPlaying)
             {
                 moveEffect.Play();
@@ -111,7 +95,7 @@ public class PlayerMove : MonoBehaviour
         {
             animator.SetTrigger("doMove");
             moveVelocity = Vector3.right;
-            transform.localScale = new Vector3(1, 1, 1);
+            render.flipX = false;//transform.localScale = rightV;
             if (!moveEffect.isPlaying)
             {
                 moveEffect.Play();
@@ -128,5 +112,4 @@ public class PlayerMove : MonoBehaviour
 
         this.transform.position += moveVelocity * movePower * Time.deltaTime;
     }
-  
 }

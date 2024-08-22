@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Shield : PlayerStatus
 {
+    PlayerMove playerMove;
     // Start is called before the first frame update
-    void Start()
+    new void Start()
     {
-        
+        Hp = 4;
+        Damage = 80;
+        playerMove.movePower = 4;
+        CritPer = 10;
+        CritDam = 130;
     }
 
     // Update is called once per frame

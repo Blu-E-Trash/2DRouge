@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class Sword : PlayerStatus
 {
-    // Start is called before the first frame update
-    void Start()
+    PlayerMove playerMove;
+    new void Start()
     {
-        
+        maxHp = 6;
+        Hp = maxHp;
+        Damage = 100;
+        playerMove.movePower = 5;
+        CritPer = 20;
+        CritDam = 150;
     }
 
     // Update is called once per frame

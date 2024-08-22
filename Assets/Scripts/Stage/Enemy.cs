@@ -34,10 +34,10 @@ public class EnemyMove : MonoBehaviour
 
     void Think()
     {
-        nextMove = Random.Range(-1, 2); //-1 = 왼쪽, 0 = 정지,1 = 오른쪽
+        nextMove = Random.Range(-1, 2); //-1 = 왼쪽,1 = 오른쪽
 
         anim.SetTrigger("Run");
-        this.transform.localScale = new Vector3(nextMove, 1, 1);
+        this.transform.localScale = new Vector3(1, 1, 1);
         //재귀 
         float nextThinkTime = Random.Range(2f, 4f);//생각하는 시간도 랜덤으로 
 
@@ -49,11 +49,11 @@ public class EnemyMove : MonoBehaviour
 
         if ((nextMove == 1))
         {
-            this.transform.localScale = new Vector3(nextMove, 1, 1); //nextMove가 1이면 방향바꾸기
+            this.transform.localScale = new Vector3(1, 1, 1); //nextMove가 1이면 방향바꾸기
         }
         if(nextMove == -1)
         {
-            this.transform.localScale = new Vector3(nextMove, 1, 1);
+            this.transform.localScale = new Vector3(-1, 1, 1);
         }
         CancelInvoke();
         Invoke("Think", 4);
