@@ -8,10 +8,11 @@ public class EnemyHp : MonoBehaviour
     private float maxHP;
     [SerializeField]
     private float currentHP;
-    public int mobCount;
+    public bool isDead;
 
     Animator animator;
     PlayerStatus playerStatus;
+    EnemyMove enemyMove;
 
     public float MaxHP => maxHP;
     public float CurrentHP => currentHP;
@@ -19,8 +20,9 @@ public class EnemyHp : MonoBehaviour
     private void Awake()
     {
         currentHP = maxHP;
-        mobCount++;
         animator = GetComponent<Animator>();
+        playerStatus = FindObjectOfType<PlayerStatus>();
+        enemyMove = FindObjectOfType<EnemyMove>();
     }
     public void mobDamaged()
     {
@@ -28,13 +30,19 @@ public class EnemyHp : MonoBehaviour
         {
             currentHP -= playerStatus.Damage;
             animator.SetTrigger("Hit");
+
             if (currentHP <= 0)
             {
                 animator.SetBool("Dead", true);
-                mobCount--;
                 playerStatus.gold += 15;
+                enemyMove.nextMove = 0;
+                Invoke("DestroyEnemy", 2);
+                isDead = true;
             }
         }
-        
+    }
+    private void DestoryEnemy()
+    {
+        Destroy(this);
     }
 }

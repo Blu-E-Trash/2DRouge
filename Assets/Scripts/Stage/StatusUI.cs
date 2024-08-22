@@ -16,6 +16,9 @@ public class StatusUI : MonoBehaviour
     [SerializeField]
     private Text CritDamText;       //크뎀
     [SerializeField]
+    private Text HpUIText;
+
+    [SerializeField]
     PlayerStatus playerStatus;
     [SerializeField]
     PlayerMove playerMove;
@@ -24,8 +27,10 @@ public class StatusUI : MonoBehaviour
     {
         DamageText.text = "공격력:" + playerStatus.Damage.ToString();
         HpText.text = "Hp:" + playerStatus.maxHp.ToString() + "/" + playerStatus.Hp.ToString();
+        HpUIText.text = "Hp:"+ playerStatus.Hp.ToString();
         movePowerText.text = "이동속도:" + playerMove.movePower.ToString();
         CritDamText.text = "치명타 데미지:"+playerStatus.CritDam.ToString()+"%";
         CritPerText.text = "치명타 확률:" + playerStatus.CritPer.ToString() + "%";
+        playerStatus.goldText.text = playerStatus.gold.ToString();
     }
 }

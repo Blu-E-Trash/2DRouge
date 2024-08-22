@@ -6,7 +6,7 @@ public class Shield : PlayerStatus
 {
     PlayerMove playerMove;
     // Start is called before the first frame update
-    new void Start()
+    private void Start()
     {
         Hp = 4;
         Damage = 80;

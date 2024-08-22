@@ -25,21 +25,16 @@ public class PlayerStatus : MonoBehaviour
     public int Hp;           //체력
     public int CritPer;       //크확
     public int CritDam;       //크뎀
-    
     public int gold;       
     PlayerMove playerMove;
 
-    public void Start()
+    public void Awake()
     {
         SystemMassageGO.SetActive(false);
         gold = 100;
-        goldText.text = gold.ToString();
         UpgradCount = 0;
     }
-    private void Update()
-    {
-        goldText.text = gold.ToString();
-    }
+
     public void UpgradeClass()
     {
         if (UpgradCount<1 && gold >= 1000)
@@ -55,6 +50,12 @@ public class PlayerStatus : MonoBehaviour
             CritPer += 20;
             playerMove.dashCooldown -= 1;
         }
+        else if (UpgradCount != 0)
+        {
+            SystemMassageGO.SetActive(true);
+            systemMassage.text = "이미 승급했습니다.";
+            Invoke("Out", 2f);
+        }
         else if (gold < 1000)
         {
             SystemMassageGO.SetActive(true);
@@ -62,12 +63,7 @@ public class PlayerStatus : MonoBehaviour
             Invoke("Out", 2f);
 
         }
-        else if (UpgradCount!=0)
-        {
-            SystemMassageGO.SetActive(true);
-            systemMassage.text = "이미 승급했습니다.";
-            Invoke("Out", 2f);
-        }
+        
     }
     private void Out()
     {

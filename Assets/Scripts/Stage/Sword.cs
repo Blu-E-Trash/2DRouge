@@ -7,7 +7,7 @@ public class Sword : PlayerStatus
 {
     PlayerMove playerMove;
     Text CharacterEx;
-    new void Start()
+    private void Start()
     {
         maxHp = 6;
         Hp = maxHp;

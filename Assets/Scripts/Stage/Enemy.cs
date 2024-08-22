@@ -6,11 +6,13 @@ public class EnemyMove : MonoBehaviour
 {
     Rigidbody2D rigid;
     Animator anim;
+    EnemyHp enemyHp;
 
     public int nextMove;//행동지표를 결정할 변수
 
     void Awake()
     {
+        enemyHp = GetComponent<EnemyHp>();
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
@@ -19,7 +21,14 @@ public class EnemyMove : MonoBehaviour
     void FixedUpdate()
     {
         //한 방향으로만 알아서 움직이게
-        rigid.velocity = new Vector2(nextMove, rigid.velocity.y);//왼쪽으로 가니까 -1
+        if (enemyHp.isDead)
+        {
+            rigid.velocity = new Vector2(0, rigid.velocity.y);//죽으면 멈추게
+        }
+        else if(!enemyHp.isDead) 
+        {
+            rigid.velocity = new Vector2(nextMove, rigid.velocity.y);
+        }
 
         //몬스터 앞 체크
         Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.2f, rigid.position.y);
@@ -51,11 +60,15 @@ public class EnemyMove : MonoBehaviour
         {
             this.transform.localScale = new Vector3(1, 1, 1); //nextMove가 1이면 방향바꾸기
         }
-        if(nextMove == -1)
+        else if(nextMove == -1)
         {
             this.transform.localScale = new Vector3(-1, 1, 1);
         }
         CancelInvoke();
         Invoke("Think", 4);
+    }
+    void Stop()
+    {
+
     }
 }
