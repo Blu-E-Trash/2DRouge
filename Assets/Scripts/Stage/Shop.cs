@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 public class Shop : MonoBehaviour
 {
@@ -21,13 +22,40 @@ public class Shop : MonoBehaviour
     GameObject SellingItemExplain;
     [SerializeField]
     BoxCollider2D boxCollider;
+    [SerializeField]
+    public GameObject ShopUI;
+    [SerializeField]
+    public GameObject SystemMassageGO;
+    [SerializeField]
+    public Text systemMassage;
+
+
+    public List<Item> availableItems;  // 상점에서 판매 가능한 아이템 목록
+    public Transform[] sellSlots;      // 판매 셀을 담당하는 UI 슬롯들
+    public int itemPrice = 10;         // 아이템 하나의 가격
+
+    [SerializeField]
+    Inventory inventory;
+    [SerializeField]
+    PlayerStatus playerStatus;
+    Item selectedItem;         // 플레이어가 선택한 아이템
+
+    public Transform pos;
+    public Vector2 boxSize;
 
 
     private void Start()
     { 
         SellingItemExplain.SetActive(false);
+        ShopUI.SetActive(false);
 
         boxCollider = GetComponent<BoxCollider2D>();
+
+        inventory = Inventory.Instance;
+        playerStatus = FindObjectOfType<PlayerStatus>();
+        PopulateSellSlots();
+
+        Physics2D.OverlapBoxAll(new Vector2(transform.position.x, transform.position.y), new Vector2(1, 1), 0);
     }
     private void Update()
     {
@@ -38,8 +66,72 @@ public class Shop : MonoBehaviour
                 SellingItemExplain.SetActive(false);
             }
         }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
+            foreach (Collider2D collider in collider2Ds)
+            {
+                if (collider.CompareTag("Shop"))
+                {
+                    Open();
+                }
+            }
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(pos.position, boxSize);
+    }
+    private void PopulateSellSlots()
+    {
+        for (int i = 0; i < sellSlots.Length; i++)
+        {
+            Item randomItem = availableItems[Random.Range(0, availableItems.Count)];
+            sellSlots[i].GetComponentInChildren<Image>().sprite = randomItem.itemImage;
+            sellSlots[i].GetComponent<Button>().onClick.AddListener(() => SelectItem(randomItem));
+        }
     }
 
+    // 아이템 선택
+    public void SelectItem(Item item)
+    {
+        selectedItem = item;
+        Debug.Log($"{item.itemName} selected.");
+    }
+    public void PurchaseSelectedItem()
+    {
+        if (selectedItem == null)
+        {
+            Debug.Log("No item selected.");
+            return;
+        }
+
+        if (playerStatus.gold >= itemPrice)
+        {
+            if (inventory.Add(selectedItem))
+            {
+                playerStatus.gold -= itemPrice;
+                Debug.Log($"{selectedItem.itemName} added to inventory. Remaining gold: {playerStatus.gold}");
+                selectedItem = null;  // 아이템을 구매하면 선택을 초기화
+                PopulateSellSlots();  // 슬롯 갱신
+            }
+            else
+            {
+                SystemMassageGO.SetActive(true);
+                systemMassage.text = "가방에 공간이 부족합니다.";
+                Invoke("Out", 2f);
+                Debug.Log("Not enough space in the inventory.");
+            }
+        }
+        else
+        {
+            SystemMassageGO.SetActive(true);
+            systemMassage.text = "돈이 부족합니다.";
+            Invoke("Out", 2f);
+            Debug.Log("Not enough gold to purchase this item.");
+        }
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -60,13 +152,11 @@ public class Shop : MonoBehaviour
 
     public void Open()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            if (canOpen)
-            {
-                canOpen = false;
-            }
-        }
+        ShopUI.SetActive(true);
+    }
+    public void closeShop()
+    {
+        ShopUI.SetActive(false);
     }
     public void ItemExplainFunction(Image ItemName)
     {
@@ -76,6 +166,10 @@ public class Shop : MonoBehaviour
             SellingItemExplain.SetActive(true);
             itemExTrue = true;
         }
+    }
+    private void Out()
+    {
+        SystemMassageGO.SetActive(false);
     }
     private void ChangeImageText(Image ItemName)
     {
@@ -87,11 +181,6 @@ public class Shop : MonoBehaviour
                 ExItemNameText.text = "룬스톤";
                 ExItemDescriptionText.text = "고대 룬이 새겨진 돌쪼가리";
                 ExItemText.text = "공/마 +10%";
-                break;
-            case "Chest":
-                ExItemNameText.text = "판도라의 상자";
-                ExItemDescriptionText.text = "이번에야말로 나올겁니다! 아마도..?";
-                ExItemText.text = "사용시 랜덤한 아이템 획득";
                 break;
             case "Feather":
                 ExItemNameText.text = "천사의 깃털";
@@ -109,54 +198,54 @@ public class Shop : MonoBehaviour
                 ExItemText.text = "상점에 판매시 100G 획득";
                 break;
             case "Helm":
-                ExItemNameText.text = "";
-                ExItemDescriptionText.text = "";
-                ExItemText.text = "";
+                ExItemNameText.text = "기사의 헬름";
+                ExItemDescriptionText.text = "이름모를 기사가 사용했던 헬름이다.";
+                ExItemText.text = "공격력 +10%,최대채력 +2";
                 break;
             case "Iron Armor":
-                ExItemNameText.text = "";
-                ExItemDescriptionText.text = "";
-                ExItemText.text = "";
+                ExItemNameText.text = "철갑옷";
+                ExItemDescriptionText.text = "든든하지만 몸이 무거워진다.";
+                ExItemText.text = "최대채력 +2, 이동속도 -1";
                 break;
             case "Iron Boot":
-                ExItemNameText.text = "";
-                ExItemDescriptionText.text = "";
-                ExItemText.text = "";
+                ExItemNameText.text = "철군화";
+                ExItemDescriptionText.text = "발이 긁힐 위험은 없어졌지만, 좀 무겁다..";
+                ExItemText.text = "최대채력 +1, 이동속도 -1";
                 break;
             case "Iron Helmet":
-                ExItemNameText.text = "";
-                ExItemDescriptionText.text = "";
-                ExItemText.text = "";
+                ExItemNameText.text = "철모";
+                ExItemDescriptionText.text = "머리가 안전해진 것이 든든하다.";
+                ExItemText.text = "최대채력 +2";
                 break;
             case "Leather Armor":
-                ExItemNameText.text = "";
-                ExItemDescriptionText.text = "";
-                ExItemText.text = "";
+                ExItemNameText.text = "가죽갑옷";
+                ExItemDescriptionText.text = "질긴 가죽으로 만들어 가볍다.";
+                ExItemText.text = "최대채력 +1, 치명타확률 +10%";
                 break;
             case "Leather Boot":
-                ExItemNameText.text = "";
-                ExItemDescriptionText.text = "";
-                ExItemText.text = "";
+                ExItemNameText.text = "가죽장화";
+                ExItemDescriptionText.text = "레인저가 신던 장화다. 몸이 날래지는 기분이 든다.";
+                ExItemText.text = "치명타확률 +10%, 이동속도 +1";
                 break;
             case "Leather Helmet":
-                ExItemNameText.text = "";
-                ExItemDescriptionText.text = "";
-                ExItemText.text = "";
+                ExItemNameText.text = "가죽모자";
+                ExItemDescriptionText.text = "왠지 비행기를 타야할것 같은 기분이다..";
+                ExItemText.text = "이동속도+1, 치명타데미지 +20%";
                 break;
             case "Skull":
-                ExItemNameText.text = "";
-                ExItemDescriptionText.text = "";
-                ExItemText.text = "";
+                ExItemNameText.text = "두개골";
+                ExItemDescriptionText.text = "야만인이 된듯한 기분..글로리아!!";
+                ExItemText.text = "공격력+50%,최대채력 -3";
                 break;
             case "Wizard Hat":
-                ExItemNameText.text = "";
-                ExItemDescriptionText.text = "";
-                ExItemText.text = "";
+                ExItemNameText.text = "마녀의 모자";
+                ExItemDescriptionText.text = "숲의 마녀가 사용하던 모자";
+                ExItemText.text = "공격력+30%";
                 break;
             case "Beer":
                 ExItemNameText.text = "맥주";
-                ExItemDescriptionText.text = "시원한 맥주한잔! 기분이 좋지만 약간 취합니다!";
-                ExItemText.text = "체력3 회복, 1스테이지간 이동속도 -2, 공격속도 20%감소";
+                ExItemDescriptionText.text = "더울땐 시원한 맥주한잔!";
+                ExItemText.text = "체력3 회복";
                 break;
             case "Bone":
                 ExItemNameText.text = "뼈";
@@ -226,7 +315,7 @@ public class Shop : MonoBehaviour
             case "Emerald Staff":
                 ExItemNameText.text = "에메랄드 스태프";
                 ExItemDescriptionText.text = "에메랄드는 얼마일까요? 마력반응이 빨라집니다!";
-                ExItemText.text = "캐스팅 속도 +10%";
+                ExItemText.text = "공격력+15%";
                 break;
             case "Golden Sword":
                 ExItemNameText.text = "화려한 검";
@@ -251,7 +340,7 @@ public class Shop : MonoBehaviour
             case "Magic Wand":
                 ExItemNameText.text = "딱총나무 지팡이";
                 ExItemDescriptionText.text = "Avada Kedavra!";
-                ExItemText.text = "마력+50%, 캐스팅 속도 +30%";
+                ExItemText.text = "마력+50%";
                 break;
             case "Sapphire Staff":
                 ExItemNameText.text = "사파이어 스태프";
@@ -271,7 +360,7 @@ public class Shop : MonoBehaviour
             case "Wooden Staff":
                 ExItemNameText.text = "고목나무 스태프";
                 ExItemDescriptionText.text = "오래된 나무면..안부러지나,,?";
-                ExItemText.text = "마력 +15%,캐스팅 속도 +15%";
+                ExItemText.text = "마력 +15%";
                 break;
             case "Wooden Sword":
                 ExItemNameText.text = "나무검";

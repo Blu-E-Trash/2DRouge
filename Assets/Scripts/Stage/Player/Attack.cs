@@ -14,11 +14,11 @@ public class Attack : MonoBehaviour
     public Animator animator;
 
     public LayerMask mobMask;
+    Shop shop;
 
     private void Start()
     {
         Physics2D.OverlapBoxAll(new Vector2(transform.position.x, transform.position.y), new Vector2(1, 1), 0, mobMask);
-        enemyHp = FindObjectOfType<EnemyHp>();
     }
     void Update()
     {
@@ -26,15 +26,19 @@ public class Attack : MonoBehaviour
         {//°ø¼Ó
             if (Input.GetButtonDown("Attack"))
             {
-
                 animator.SetTrigger("doAttack");
                 Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0,mobMask);
                 foreach (Collider2D collider in collider2Ds)
                 {
                     if (collider.CompareTag("Mob"))
                     {
+                        enemyHp = collider.GetComponent<EnemyHp>();
                         Debug.Log(collider.name);
                         enemyHp.mobDamaged();
+                    }
+                    else if (collider.CompareTag("Shop"))
+                    {
+                        shop.Open();
                     }
                 }
                 curTime = coolTime;

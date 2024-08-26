@@ -67,8 +67,4 @@ public class EnemyMove : MonoBehaviour
         CancelInvoke();
         Invoke("Think", 4);
     }
-    void Stop()
-    {
-
-    }
 }

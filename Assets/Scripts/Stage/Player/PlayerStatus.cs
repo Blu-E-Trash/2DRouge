@@ -7,8 +7,6 @@ using UnityEngine.UI;
 public class PlayerStatus : MonoBehaviour
 {
     [SerializeField]
-    public Text goldText;           //얼마 있는지 확인
-    [SerializeField]
     public Text systemMassage;
     [SerializeField]
     public GameObject SystemMassageGO;
@@ -27,14 +25,14 @@ public class PlayerStatus : MonoBehaviour
     public int CritDam;       //크뎀
     public int gold;       
     PlayerMove playerMove;
-
+    StatusUI statusUI;
     public void Awake()
     {
         SystemMassageGO.SetActive(false);
         gold = 100;
         UpgradCount = 0;
+        statusUI.HpText.text = "Hp:" + maxHp.ToString() + "/" + Hp.ToString();
     }
-
     public void UpgradeClass()
     {
         if (UpgradCount<1 && gold >= 1000)

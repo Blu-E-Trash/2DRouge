@@ -26,23 +26,27 @@ public class EnemyHp : MonoBehaviour
     }
     public void mobDamaged()
     {
+        currentHP -= playerStatus.Damage;
         if (currentHP > 0)
         {
-            currentHP -= playerStatus.Damage;
             animator.SetTrigger("Hit");
-
-            if (currentHP <= 0)
-            {
-                animator.SetBool("Dead", true);
-                playerStatus.gold += 15;
-                enemyMove.nextMove = 0;
-                Invoke("DestroyEnemy", 2);
-                isDead = true;
-            }
+            Invoke("Stop",1);
+        }
+        else if (currentHP <= 0)
+        {
+            animator.SetBool("Dead", true);
+            playerStatus.gold += 15;
+            enemyMove.nextMove = 0;
+            Invoke("DestoryEnemy", 2);
+            isDead = true;
         }
     }
     private void DestoryEnemy()
     {
         Destroy(this);
+    }
+    private void Stop()
+    {
+        enemyMove.nextMove = 0;
     }
 }
