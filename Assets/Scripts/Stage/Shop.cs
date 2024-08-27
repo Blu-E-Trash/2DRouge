@@ -78,11 +78,6 @@ public class Shop : MonoBehaviour
             }
         }
     }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(pos.position, boxSize);
-    }
     private void PopulateSellSlots()
     {
         for (int i = 0; i < sellSlots.Length; i++)
