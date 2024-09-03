@@ -6,12 +6,32 @@ using UnityEngine.UI;
 
 public class StartUI : MonoBehaviour
 {
+    [SerializeField]
+    protected GameObject TutorialUI;
+    protected bool tutorialOPen;
+
+    private void Start()
+    {
+        TutorialUI.SetActive(false);
+        tutorialOPen = false;
+    }
     public void StartButton()
     {
-        SceneManager.LoadScene("Lobby");
+        if (!tutorialOPen)
+        {
+            SceneManager.LoadScene("Lobby");
+        }
     }
     public void ExitButton()
     {
-        Application.Quit();
+        if (!tutorialOPen)
+        {
+            Application.Quit();
+        }
+    }
+    public void TutorialButton()
+    {
+        TutorialUI.SetActive(true);
+        tutorialOPen = true;
     }
 }
