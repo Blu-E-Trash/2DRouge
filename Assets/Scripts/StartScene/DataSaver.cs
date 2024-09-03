@@ -1,12 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 using System;
 
 public class DataSaver : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject SystemMassage;
+    [SerializeField]
+    private Text SystemMassageText;
+
     static GameObject _DataSaver;
+    private void Start()
+    {
+        SystemMassage.SetActive(false);
+    }
     static GameObject Container
     {
         get
@@ -52,14 +62,19 @@ public class DataSaver : MonoBehaviour
         if(File.Exists(filePath))
         {
             Debug.Log("불러오기 성공");
+            SystemMassage.SetActive(true);
+            SystemMassageText.text = "불러오기 성공!";
             string FromJsonData = File.ReadAllText(filePath);
             _gameData = JsonUtility.FromJson<GameData>(FromJsonData);
+            Invoke("Out", 2f);
         }
         else
         {
             Debug.Log("새 파일 생성");
-
+            SystemMassage.SetActive(true);
+            SystemMassageText.text = "저장된 데이터가 없습니다.";
             _gameData = new GameData();
+            Invoke("Out", 2f);
         }
     }
     public void SaveGameData()
@@ -68,10 +83,16 @@ public class DataSaver : MonoBehaviour
         string filePath = Application.persistentDataPath + GameDataFileName;
         File.WriteAllText(filePath, ToJasonData);
         Debug.Log("저장파일 생성 완료");
+        SystemMassage.SetActive(true);
+        SystemMassageText.text = "저장 성공!";
+        Invoke("Out", 2f);
     }
     private void OnApplicationQuit()
     {
         SaveGameData() ;
     }
-
+    private void Out()
+    {
+        SystemMassage.SetActive(false);
+    }
 }

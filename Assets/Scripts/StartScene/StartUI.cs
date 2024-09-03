@@ -7,13 +7,26 @@ using UnityEngine.UI;
 public class StartUI : MonoBehaviour
 {
     [SerializeField]
-    protected GameObject TutorialUI;
-    protected bool tutorialOPen;
+    private GameObject TutorialUI;
+
+
+    private bool tutorialOPen;
 
     private void Start()
     {
         TutorialUI.SetActive(false);
         tutorialOPen = false;
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (tutorialOPen)
+            {
+                TutorialUI.SetActive(false);
+                tutorialOPen = false;
+            }
+        }
     }
     public void StartButton()
     {
