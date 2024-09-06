@@ -42,6 +42,7 @@ public class Inventory : MonoBehaviour
         }
 
         inventoryItems.Add(item);
+        inventorySlots.AddItem(item);
         item.ApplyEffect(playerStatus);
         Debug.Log(item.itemName + " added to inventory.");
 

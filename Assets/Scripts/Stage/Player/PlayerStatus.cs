@@ -25,6 +25,7 @@ public class PlayerStatus : MonoBehaviour
     public int CritDam;       //Å©µ©
     public int gold;       
     PlayerMove playerMove;
+    [SerializeField]
     StatusUI statusUI;
     public void Awake()
     {

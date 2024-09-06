@@ -136,15 +136,6 @@ public class Shop : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            canOpen = false;
-            Debug.Log("Player has left the box!");
-        }
-    }
-
     public void Open()
     {
         ShopUI.SetActive(true);
