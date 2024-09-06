@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Sword : PlayerStatus
 {
-    PlayerMove playerMove;
     Text CharacterEx;
     private void Start()
     {

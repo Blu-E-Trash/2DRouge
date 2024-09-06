@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Shield : PlayerStatus
 {
-    PlayerMove playerMove;
     // Start is called before the first frame update
     private void Start()
     {

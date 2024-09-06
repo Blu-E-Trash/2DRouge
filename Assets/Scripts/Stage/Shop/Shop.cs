@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
 
 public class Shop : MonoBehaviour
 {
     public bool canOpen;
     private bool itemExTrue;
-    private Image SellingItemImage;
+
+    public Action action;
 
     [SerializeField]
     public Image ExItemImage; // 아이템의 이미지
@@ -21,8 +22,6 @@ public class Shop : MonoBehaviour
     [SerializeField]
     GameObject SellingItemExplain;
     [SerializeField]
-    BoxCollider2D boxCollider;
-    [SerializeField]
     public GameObject ShopUI;
     [SerializeField]
     public GameObject SystemMassageGO;
@@ -31,7 +30,7 @@ public class Shop : MonoBehaviour
 
 
     public List<Item> availableItems;  // 상점에서 판매 가능한 아이템 목록
-    public Transform[] sellSlots;      // 판매 셀을 담당하는 UI 슬롯들
+    public Item[] sellSlots;      // 판매 셀을 담당하는 UI 슬롯들
     public int itemPrice = 10;         // 아이템 하나의 가격
 
     [SerializeField]
@@ -40,22 +39,16 @@ public class Shop : MonoBehaviour
     PlayerStatus playerStatus;
     Item selectedItem;         // 플레이어가 선택한 아이템
 
-    public Transform pos;
-    public Vector2 boxSize;
-
 
     private void Start()
     { 
         SellingItemExplain.SetActive(false);
         ShopUI.SetActive(false);
 
-        boxCollider = GetComponent<BoxCollider2D>();
-
         inventory = Inventory.Instance;
         playerStatus = FindObjectOfType<PlayerStatus>();
         PopulateSellSlots();
 
-        Physics2D.OverlapBoxAll(new Vector2(transform.position.x, transform.position.y), new Vector2(1, 1), 0);
     }
     private void Update()
     {
@@ -66,33 +59,22 @@ public class Shop : MonoBehaviour
                 SellingItemExplain.SetActive(false);
             }
         }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
-            foreach (Collider2D collider in collider2Ds)
-            {
-                if (collider.CompareTag("Shop"))
-                {
-                    Open();
-                }
-            }
-        }
     }
     private void PopulateSellSlots()
     {
         for (int i = 0; i < sellSlots.Length; i++)
         {
-            Item randomItem = availableItems[Random.Range(0, availableItems.Count)];
-            sellSlots[i].GetComponentInChildren<Image>().sprite = randomItem.itemImage;
-            sellSlots[i].GetComponent<Button>().onClick.AddListener(() => SelectItem(randomItem));
+            int randomItem = UnityEngine.Random.Range(0, availableItems.Count);
+            sellSlots[i] = availableItems[randomItem];
         }
+        action.Invoke();
     }
 
     // 아이템 선택
     public void SelectItem(Item item)
     {
         selectedItem = item;
-        Debug.Log($"{item.itemName} selected.");
+        ChangeImageText(item.itemName);
     }
     public void PurchaseSelectedItem()
     {
@@ -127,28 +109,17 @@ public class Shop : MonoBehaviour
             Debug.Log("Not enough gold to purchase this item.");
         }
     }
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            canOpen = true;
-            Debug.Log("Player has entered the box!");
-        }
-    }
 
-    public void Open()
-    {
-        ShopUI.SetActive(true);
-    }
     public void closeShop()
     {
         ShopUI.SetActive(false);
     }
-    public void ItemExplainFunction(Image ItemName)
+    public void ItemExplainFunction(Item item)
     {
-        if (ItemName.sprite != null)
+        if (item != null)
         {
-            ChangeImageText(ItemName);
+            ChangeImageText(item.itemName);
+            ExItemImage.sprite = item.itemImage;
             SellingItemExplain.SetActive(true);
             itemExTrue = true;
         }
@@ -157,10 +128,8 @@ public class Shop : MonoBehaviour
     {
         SystemMassageGO.SetActive(false);
     }
-    private void ChangeImageText(Image ItemName)
+    private void ChangeImageText(string ItemName)
     {
-        ExItemImage.sprite = ItemName.sprite;
-
         switch (ExItemImage.sprite.name)
         {
             case "Rune Stone":

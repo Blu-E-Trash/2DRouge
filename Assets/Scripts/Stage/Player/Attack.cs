@@ -36,10 +36,6 @@ public class Attack : MonoBehaviour
                         Debug.Log(collider.name);
                         enemyHp.mobDamaged();
                     }
-                    else if (collider.CompareTag("Shop"))
-                    {
-                        shop.Open();
-                    }
                 }
                 curTime = coolTime;
             }

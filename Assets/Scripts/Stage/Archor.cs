@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Archor : PlayerStatus
 {
-    PlayerMove playerMove;
     private void Start()
     {
         Hp = 3;
