@@ -31,6 +31,8 @@ public class Shop : MonoBehaviour
     public Item[] sellSlots;           // 판매 셀을 담당하는 UI 슬롯들
     [SerializeField]
     private ShopButton[] shopbt;
+    [SerializeField]
+    private Button[] buttons;
 
     private Item itemScript;
     [SerializeField]
@@ -62,9 +64,12 @@ public class Shop : MonoBehaviour
     {
         for (int i = 0; i < sellSlots.Length; i++)
         {
+            int temp = i;
             int randomItem = UnityEngine.Random.Range(0, availableItems.Count);
             sellSlots[i] = availableItems[randomItem];
             shopbt[i].ChangeImage(sellSlots[i]);
+            buttons[i].onClick.AddListener(()=>SelectItem(sellSlots[temp]));
+            Debug.Log(i);
         }
     }
     // 아이템 선택
@@ -82,14 +87,14 @@ public class Shop : MonoBehaviour
             itemExTrue = true;
         }
     }
-    public void PurchaseSelectedItem()
+    public void PurchaseSelectedItem(Item item)
     {
-        if (selectedItem.itemImage == null)
+        if (item == null)
         {
             Debug.Log("No item selected.");
             return;
         }
-        else if (playerStatus.gold >= itemScript.itemPrice)
+        else if (playerStatus.gold >= itemScript.itemPrice&&item != null)
         {
             if (inventory.inventoryItems.Count < inventory.maxSlots)
             {

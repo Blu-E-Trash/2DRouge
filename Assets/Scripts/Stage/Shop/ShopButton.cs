@@ -15,6 +15,4 @@ public class ShopButton : MonoBehaviour
     {
         sellItemImage.sprite = item.itemImage;
     }
-
-
 }

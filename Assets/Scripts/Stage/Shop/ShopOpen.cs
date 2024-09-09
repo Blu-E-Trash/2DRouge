@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.PlayerSettings;
+using UnityEngine.UI;
 
 public class ShopOpen : MonoBehaviour
 {
@@ -30,5 +31,6 @@ public class ShopOpen : MonoBehaviour
     public void Open()
     {
         shop.ShopUI.SetActive(true);
+        shop.itemPrice.text = "구매하기";
     }
 }
