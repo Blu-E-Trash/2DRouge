@@ -33,20 +33,13 @@ public class Inventory : MonoBehaviour
         }
     }
     //아이템 추가
-    public bool Add(Item item)
+    public void Add(Item item)
     {
-        if (inventoryItems.Count >= maxSlots)
-        {
-            Debug.Log("칸이 부족함");
-            return false;
-        }
-
         inventoryItems.Add(item);
         inventorySlots.AddItem(item);
         item.ApplyEffect(playerStatus);
         Debug.Log(item.itemName + " added to inventory.");
-
-        return true;
+        
     }
     //아이템 제거
     public void Remove(Item item)

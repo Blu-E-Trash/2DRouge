@@ -15,8 +15,14 @@ MonoBehaviour:
   itemName: Silver Coin
   itemImage: {fileID: 21300000, guid: 83f2beb3e2ba2e347b4b0d5d63d0373b, type: 3}
   attackBonus: 0
-  hpBonus: 0
+  maxHpBonus: 0
+  hpHeal: 0
   speedBonus: 0
+  jumpBonus: 0
   critDamBonus: 0
   critperBonus: 0
+  goldBonus: 0
+  getGoldBonus: 0
+  itemPrice: 250
+  sellPrice: 125
   inInventory: 0

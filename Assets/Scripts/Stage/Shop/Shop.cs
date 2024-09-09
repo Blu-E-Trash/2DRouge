@@ -6,10 +6,7 @@ using UnityEngine.UI;
 
 public class Shop : MonoBehaviour
 {
-    public bool canOpen;
     private bool itemExTrue;
-
-    public Action action;
 
     [SerializeField]
     public Image ExItemImage; // 아이템의 이미지
@@ -27,18 +24,20 @@ public class Shop : MonoBehaviour
     public GameObject SystemMassageGO;
     [SerializeField]
     public Text systemMassage;
-
+    [SerializeField]
+    public Text itemPrice;
 
     public List<Item> availableItems;  // 상점에서 판매 가능한 아이템 목록
-    public Item[] sellSlots;      // 판매 셀을 담당하는 UI 슬롯들
-    public int itemPrice = 10;         // 아이템 하나의 가격
+    public Item[] sellSlots;           // 판매 셀을 담당하는 UI 슬롯들
+    [SerializeField]
+    private ShopButton[] shopbt;
 
+    private Item itemScript;
     [SerializeField]
     Inventory inventory;
     [SerializeField]
     PlayerStatus playerStatus;
     Item selectedItem;         // 플레이어가 선택한 아이템
-
 
     private void Start()
     { 
@@ -48,7 +47,6 @@ public class Shop : MonoBehaviour
         inventory = Inventory.Instance;
         playerStatus = FindObjectOfType<PlayerStatus>();
         PopulateSellSlots();
-
     }
     private void Update()
     {
@@ -66,32 +64,38 @@ public class Shop : MonoBehaviour
         {
             int randomItem = UnityEngine.Random.Range(0, availableItems.Count);
             sellSlots[i] = availableItems[randomItem];
+            shopbt[i].ChangeImage(sellSlots[i]);
         }
-        action.Invoke();
     }
-
     // 아이템 선택
     public void SelectItem(Item item)
     {
-        selectedItem = item;
-        ChangeImageText(item.itemName);
+        if (item != null)
+        {
+            selectedItem = item;                              //아이템 설정함
+            itemPrice.text = "$" + item.itemPrice.ToString(); //가격 설정
+            
+            //설명 이미지
+            ChangeImageText(item.itemName);                   //이미지 변경
+            ExItemImage.sprite = item.itemImage;
+            SellingItemExplain.SetActive(true);
+            itemExTrue = true;
+        }
     }
     public void PurchaseSelectedItem()
     {
-        if (selectedItem == null)
+        if (selectedItem.itemImage == null)
         {
             Debug.Log("No item selected.");
             return;
         }
-
-        if (playerStatus.gold >= itemPrice)
+        else if (playerStatus.gold >= itemScript.itemPrice)
         {
-            if (inventory.Add(selectedItem))
+            if (inventory.inventoryItems.Count < inventory.maxSlots)
             {
-                playerStatus.gold -= itemPrice;
-                Debug.Log($"{selectedItem.itemName} added to inventory. Remaining gold: {playerStatus.gold}");
-                selectedItem = null;  // 아이템을 구매하면 선택을 초기화
-                PopulateSellSlots();  // 슬롯 갱신
+                inventory.Add(selectedItem);
+                playerStatus.gold -= itemScript.itemPrice;
+                selectedItem = null;
             }
             else
             {
@@ -104,7 +108,7 @@ public class Shop : MonoBehaviour
         else
         {
             SystemMassageGO.SetActive(true);
-            systemMassage.text = "돈이 부족합니다.";
+            systemMassage.text = "골드가 부족합니다.";
             Invoke("Out", 2f);
             Debug.Log("Not enough gold to purchase this item.");
         }
@@ -114,23 +118,13 @@ public class Shop : MonoBehaviour
     {
         ShopUI.SetActive(false);
     }
-    public void ItemExplainFunction(Item item)
-    {
-        if (item != null)
-        {
-            ChangeImageText(item.itemName);
-            ExItemImage.sprite = item.itemImage;
-            SellingItemExplain.SetActive(true);
-            itemExTrue = true;
-        }
-    }
     private void Out()
     {
         SystemMassageGO.SetActive(false);
     }
     private void ChangeImageText(string ItemName)
     {
-        switch (ExItemImage.sprite.name)
+        switch (ItemName)
         {
             case "Rune Stone":
                 ExItemNameText.text = "룬스톤";

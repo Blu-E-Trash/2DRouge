@@ -22,5 +22,7 @@ MonoBehaviour:
   critDamBonus: 0
   critperBonus: 0
   goldBonus: 0
-  getGoldBonus: 0
+  getGoldBonus: 150
+  itemPrice: 75
+  sellPrice: 0
   inInventory: 0

@@ -6,20 +6,15 @@ using UnityEngine.UI;
 public class ShopButton : MonoBehaviour
 {
     [SerializeField]
-    Shop shop;
-    [SerializeField]
-    int index;
+    private Shop shop;
 
-    Button button;
-    Image image;
-    void Start()
+    [SerializeField]
+    private Image sellItemImage;
+    
+    public void ChangeImage(Item item)
     {
-        button = GetComponent<Button>();
-        image = GetComponent<Image>();
+        sellItemImage.sprite = item.itemImage;
     }
-    private void foo()
-    {
-        button.onClick.AddListener(() => { shop.SelectItem(shop.sellSlots[index]); });
-        image.sprite = shop.sellSlots[index].itemImage;
-    }
+
+
 }

@@ -20,6 +20,8 @@ public class Item : ScriptableObject
     public int critperBonus;
     public int goldBonus;       //추가골드
     public int getGoldBonus;    //골획 증가
+    public int itemPrice;       //사는 가격
+    public int sellPrice;       //파는 가격
 
     public bool inInventory;
 
