@@ -81,7 +81,7 @@ public class Shop : MonoBehaviour
             itemPrice.text = "$" + item.itemPrice.ToString(); //가격 설정
             
             //설명 이미지
-            ChangeImageText(item.itemName);                   //이미지 변경
+            ChangeText(item.itemName);                   //이미지 변경
             ExItemImage.sprite = item.itemImage;
             SellingItemExplain.SetActive(true);
             itemExTrue = true;
@@ -98,9 +98,9 @@ public class Shop : MonoBehaviour
         {
             if (inventory.inventoryItems.Count < inventory.maxSlots)
             {
-                inventory.Add(selectedItem);
+                inventory.Add(item);
                 playerStatus.gold -= itemScript.itemPrice;
-                selectedItem = null;
+                item = null;
             }
             else
             {
@@ -127,7 +127,7 @@ public class Shop : MonoBehaviour
     {
         SystemMassageGO.SetActive(false);
     }
-    private void ChangeImageText(string ItemName)
+    private void ChangeText(string ItemName)
     {
         switch (ItemName)
         {

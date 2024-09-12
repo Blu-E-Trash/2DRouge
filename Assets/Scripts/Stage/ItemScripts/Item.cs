@@ -8,6 +8,7 @@ public class Item : ScriptableObject
     public string itemName;
     public Sprite itemImage;
 
+    PlayerStatus playerStatus;
     PlayerMove move;
     Jump jump;
 
@@ -25,32 +26,32 @@ public class Item : ScriptableObject
 
     public bool inInventory;
 
-    public void ApplyEffect(PlayerStatus playerStatus)
+    public void ApplyEffect(Item item)
     {
         inInventory = true;
 
-        playerStatus.Damage += attackBonus;
-        playerStatus.maxHp += maxHpBonus;
-        playerStatus.Hp += hpHeal;
-        playerStatus.CritDam += critDamBonus;
-        playerStatus.CritPer += critperBonus;
-        playerStatus.gold += goldBonus;
+        playerStatus.Damage += item.attackBonus;
+        playerStatus.maxHp += item.maxHpBonus;
+        playerStatus.Hp += item.hpHeal;
+        playerStatus.CritDam += item.critDamBonus;
+        playerStatus.CritPer += item.critperBonus;
+        playerStatus.gold += item.goldBonus;
         //∞Ò»π¡ı∞° +
-        jump.jumpPower += jumpBonus;
-        move.movePower += speedBonus;
+        jump.jumpPower += item.jumpBonus;
+        move.movePower += item.speedBonus;
     }
 
-    public void RemoveEffect(PlayerStatus playerStatus)
+    public void RemoveEffect(Item item)
     {
         inInventory = false;
 
-        playerStatus.Damage -= attackBonus;
-        playerStatus.maxHp -= maxHpBonus;
-        playerStatus.Hp -= hpHeal;
-        playerStatus.CritDam -= critDamBonus;
-        playerStatus.CritPer -= critperBonus;
+        playerStatus.Damage -= item.attackBonus;
+        playerStatus.maxHp -= item.maxHpBonus;
+        playerStatus.Hp -= item.hpHeal;
+        playerStatus.CritDam -= item.critDamBonus;
+        playerStatus.CritPer -= item.critperBonus;
         //∞Ò»π¡ı∞° -
-        jump.jumpPower -= jumpBonus;
-        move.movePower -= speedBonus;
+        jump.jumpPower -= item.jumpBonus;
+        move.movePower -= item.speedBonus;
     }
 }

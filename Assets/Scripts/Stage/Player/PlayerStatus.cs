@@ -14,6 +14,8 @@ public class PlayerStatus : MonoBehaviour
     public Image characterImage; //캐릭터 초상화
     [SerializeField]
     public Image UIcharacterImage;
+    [SerializeField]
+    private Text ExText;
     public Sprite UpgradedClass; //업글 후의 초상화
 
     protected int UpgradCount;
@@ -23,8 +25,10 @@ public class PlayerStatus : MonoBehaviour
     public int Hp;           //체력
     public int CritPer;       //크확
     public int CritDam;       //크뎀
-    public int gold;       
+    public int gold;
+    
     protected PlayerMove playerMove;
+
     [SerializeField]
     StatusUI statusUI;
     public void Awake()
@@ -48,6 +52,7 @@ public class PlayerStatus : MonoBehaviour
             CritDam += 30;
             CritPer += 20;
             playerMove.dashCooldown -= 1;
+            ExText.text = "기사";
         }
         else if (UpgradCount != 0)
         {
@@ -64,8 +69,12 @@ public class PlayerStatus : MonoBehaviour
         }
         
     }
+
     private void Out()
     {
         SystemMassageGO.SetActive(false);
     }
 }
+
+
+

@@ -10,7 +10,7 @@ public class Inventory : MonoBehaviour
     public List<Item> inventoryItems = new List<Item>(); //인벤토리에 들어있는 아이템
     public int maxSlots = 6; // 최대 슬롯 개수
 
-    private InventorySlots inventorySlots;
+    public InventorySlots inventorySlots;
 
     private PlayerStatus playerStatus;
 
@@ -29,24 +29,29 @@ public class Inventory : MonoBehaviour
 
         foreach (Item item in inventoryItems)
         {
-            item.ApplyEffect(playerStatus); // 아이템 효과 적용
+            item.ApplyEffect(item); // 아이템 효과 적용
         }
     }
     //아이템 추가
     public void Add(Item item)
     {
-        inventoryItems.Add(item);
-        inventorySlots.AddItem(item);
-        item.ApplyEffect(playerStatus);
-        Debug.Log(item.itemName + " added to inventory.");
-        
+        for (int i = 0; i < maxSlots; i++)
+        {
+            if (inventoryItems[i]==null)
+            {
+                inventoryItems.Add(item);
+                inventorySlots.AddItem(item);
+                item.ApplyEffect(item);
+                Debug.Log(item.itemName + " added to inventory.");
+            }
+        }
     }
     //아이템 제거
     public void Remove(Item item)
     {
         inventoryItems.Remove(item);
         inventorySlots.ClearSlot();
-        item.RemoveEffect(playerStatus);
+        item.RemoveEffect(item);
         
     }
 }
