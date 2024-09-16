@@ -16,8 +16,9 @@ public class PlayerMove : MonoBehaviour
     private float lastDashTime;
 
     protected Rigidbody2D rb;
-    protected Animator animator;
+    public Animator animator;
     protected Collider2D Playercollider2D;
+    private EnemyHp enemyHp;
     SpriteRenderer render;
 
     Vector3 leftV = new Vector3(-1, 1, 1);
@@ -25,6 +26,8 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField]
     ParticleSystem moveEffect;
+    [SerializeField]
+    private GameManager gameManager;
 
     protected void Awake()
     {

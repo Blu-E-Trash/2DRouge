@@ -39,7 +39,11 @@ public class Shop : MonoBehaviour
     Inventory inventory;
     [SerializeField]
     PlayerStatus playerStatus;
-    Item selectedItem;         // 플레이어가 선택한 아이템
+    public Item selectedItem;         // 플레이어가 선택한 아이템
+
+
+    [SerializeField]
+    private GameManager gameManager;
 
     private void Start()
     { 
@@ -69,7 +73,6 @@ public class Shop : MonoBehaviour
             sellSlots[i] = availableItems[randomItem];
             shopbt[i].ChangeImage(sellSlots[i]);
             buttons[i].onClick.AddListener(()=>SelectItem(sellSlots[temp]));
-            Debug.Log(i);
         }
     }
     // 아이템 선택
@@ -78,36 +81,31 @@ public class Shop : MonoBehaviour
         if (item != null)
         {
             selectedItem = item;                              //아이템 설정함
-            itemPrice.text = "$" + item.itemPrice.ToString(); //가격 설정
+            itemPrice.text = "$" + selectedItem.itemPrice.ToString(); //가격 설정
             
             //설명 이미지
-            ChangeText(item.itemName);                   //이미지 변경
-            ExItemImage.sprite = item.itemImage;
+            ChangeText(selectedItem.itemName);                   //이미지 변경
+            ExItemImage.sprite = selectedItem.itemImage;
             SellingItemExplain.SetActive(true);
             itemExTrue = true;
         }
     }
-    public void PurchaseSelectedItem(Item item)
+    public void PurchaseSelectedItem()
     {
-        if (item == null)
-        {
-            Debug.Log("No item selected.");
-            return;
-        }
-        else if (playerStatus.gold >= itemScript.itemPrice&&item != null)
+        Debug.Log(selectedItem.itemName);
+        if (playerStatus.gold >= selectedItem.itemPrice)
         {
             if (inventory.inventoryItems.Count < inventory.maxSlots)
             {
-                inventory.Add(item);
-                playerStatus.gold -= itemScript.itemPrice;
-                item = null;
+                gameManager.AddItemtoInventory(selectedItem);
+                playerStatus.gold -= selectedItem.itemPrice;
+                selectedItem = null;
             }
             else
             {
                 SystemMassageGO.SetActive(true);
                 systemMassage.text = "가방에 공간이 부족합니다.";
                 Invoke("Out", 2f);
-                Debug.Log("Not enough space in the inventory.");
             }
         }
         else
@@ -115,7 +113,6 @@ public class Shop : MonoBehaviour
             SystemMassageGO.SetActive(true);
             systemMassage.text = "골드가 부족합니다.";
             Invoke("Out", 2f);
-            Debug.Log("Not enough gold to purchase this item.");
         }
     }
 

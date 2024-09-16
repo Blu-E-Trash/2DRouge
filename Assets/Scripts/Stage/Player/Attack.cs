@@ -14,12 +14,7 @@ public class Attack : MonoBehaviour
     public Animator animator;
 
     public LayerMask mobMask;
-    Shop shop;
 
-    private void Start()
-    {
-        Physics2D.OverlapBoxAll(new Vector2(transform.position.x, transform.position.y), new Vector2(1, 1), 0, mobMask);
-    }
     void Update()
     {
         if (curTime <= 0)

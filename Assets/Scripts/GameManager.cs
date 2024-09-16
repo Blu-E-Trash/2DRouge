@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     [SerializeField]
-    private Text SystemMassage;        
+    private Text SystemMassage;
+    [SerializeField]
+    private Sword sword;
+    [SerializeField]
+    private PlayerMove playerMove;
 
     public bool isGameOver;
 
+    [SerializeField]
+    private Transform playerpos;
     //저장될 데이터
     public bool isUpgrade;      //승급
     public int playerGold;      //골드
     public int playerHp;        //채력
     public Item[] inventory;     //인벤은 바뀔수도 있음;
+    private InventoryUI inventoryUI;
 
     private void Awake()
     {
@@ -36,19 +44,31 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("GameOver");
         }
-        
-        if(isGameOver&&Input.GetMouseButtonDown(0))
+        if (isGameOver && Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene("Lobby");
+            SceneManager.LoadScene("FirstSceen");
+            isGameOver=false;
+        }
+        if (playerpos.position.y < -15)
+        {
+            fallDamage();
         }
     }
-    public void getAttacked(int Damage)
+    public void getAttacked()
     {
-        playerHp -= Damage;
-        if (playerHp <= 0)
+        sword.Hp -= 1;
+        Debug.Log("아파요");
+        playerMove.animator.SetTrigger("doHit");
+        if (sword.Hp <= 0)
         {
+            playerMove.animator.SetTrigger("doDie");
             isGameOver = true;
         }
+    }
+    public void fallDamage()
+    {
+        sword.Hp -= 1;
+        playerpos.position = new Vector3(-10, -3, -1);  
     }
     public void AddItemtoInventory(Item item)
     {
@@ -57,6 +77,7 @@ public class GameManager : MonoBehaviour
             if (inventory[i] == null)
             {
                 inventory[i] = item;
+                inventoryUI.UpdateInventoryUI();
                 return;
             }
         }
@@ -65,6 +86,13 @@ public class GameManager : MonoBehaviour
     }
     public void RemoveItem(Item item)
     {
-        inventory[1] = null;//임시로 1 넣어놨음
+        inventory[0] = null;
+        inventoryUI.ClearSlot();
+    }
+    private void getStat()
+    {
+        playerHp = sword.Hp;
+        playerGold = sword.gold;
+        isUpgrade = false;          //임시
     }
 }

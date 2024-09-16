@@ -12,10 +12,6 @@ public class InventoryUI : MonoBehaviour
 
     [SerializeField]
     public GameObject inventoryPanel;  // 인벤토리 패널
-    [SerializeField]
-    public Transform itemsParent;      // 슬롯들을 담는 부모 객체
-
-    private List<InventorySlots> slots = new List<InventorySlots>();  // 현재 UI에 생성된 슬롯 리스트
 
     [SerializeField]
     public Image ExItemImage; // 아이템의 이미지
@@ -26,7 +22,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField]
     public Text ExItemText; // 아이템의 효과 텍스트
 
-    private Image ItemImage;            //메인 인밴토리의 아이템 이미지
+    private Image ItemImage;  //메인 인밴토리의 아이템 이미지
 
     private bool maintrue;
     private bool itemExTrue;
@@ -84,21 +80,12 @@ public class InventoryUI : MonoBehaviour
     }
     public void UpdateInventoryUI()
     {
-        // 모든 슬롯을 비우고 인벤토리 아이템으로 채우기
-        foreach (InventorySlots slot in slots)
-        {
-            slot.ClearSlot();  // 슬롯 초기화
-        }
-
-        for (int i = 0; i < Inventory.Instance.inventoryItems.Count; i++)
-        {
-            if (i < slots.Count)
-            {
-                slots[i].AddItem(Inventory.Instance.inventoryItems[i]);
-            }
-        }
+        
     }
+    public void ClearSlot()
+    {
 
+    }
     public void ItemExplainFunction(Image ItemName)
     {
         if (ItemName.sprite == null)

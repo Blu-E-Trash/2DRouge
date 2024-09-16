@@ -25,19 +25,22 @@ public class PlayerStatus : MonoBehaviour
     public int Hp;           //체력
     public int CritPer;       //크확
     public int CritDam;       //크뎀
-    public int gold;
+    public int gold;        
     
     protected PlayerMove playerMove;
 
     [SerializeField]
     StatusUI statusUI;
+
     public void Awake()
     {
         SystemMassageGO.SetActive(false);
         gold = 100;
         UpgradCount = 0;
+        Hp = maxHp;
         statusUI.HpText.text = "Hp:" + maxHp.ToString() + "/" + Hp.ToString();
     }
+    
     public void UpgradeClass()
     {
         if (UpgradCount<1 && gold >= 1000)
@@ -67,9 +70,7 @@ public class PlayerStatus : MonoBehaviour
             Invoke("Out", 2f);
 
         }
-        
     }
-
     private void Out()
     {
         SystemMassageGO.SetActive(false);

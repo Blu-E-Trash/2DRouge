@@ -9,7 +9,6 @@ public class Sword : PlayerStatus
     private void Start()
     {
         maxHp = 6;
-        Hp = maxHp;
         Damage = 100;
         playerMove.movePower = 5;
         CritPer = 20;

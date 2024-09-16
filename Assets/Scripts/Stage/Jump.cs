@@ -60,8 +60,7 @@ public class Jump : PlayerMove
         RaycastHit2D hit = Physics2D.Raycast(StartPoint, Vector2.down, RayLength, Mask);
 
         if(hit.collider != null)
-        {//∂•ø° ¿÷¿ªãö
-            Debug.Log(hit.collider);
+        {
             jumpCount = 0;
         }
     }
