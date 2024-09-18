@@ -35,8 +35,7 @@ public class EnemyHp : MonoBehaviour
         else if (currentHP <= 0)
         {
             animator.SetBool("Dead", true);
-            playerStatus.gold += 15;
-            enemyMove.nextMove = 0;
+            playerStatus.gold += 30;
             Invoke("DestoryEnemy", 2);
             isDead = true;
         }

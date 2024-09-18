@@ -32,7 +32,7 @@ public class StartUI : MonoBehaviour
     {
         if (!tutorialOPen)
         {
-            SceneManager.LoadScene("Lobby");
+            SceneManager.LoadScene("Stage1");
         }
     }
     public void ExitButton()

@@ -56,6 +56,15 @@ public class GameManager : MonoBehaviour
     }
     public void getAttacked()
     {
+        if(playerMove.immortal) {
+            return;
+        }
+        if (playerMove.isDash){
+            return;
+        }
+
+        playerMove.immortal = true;
+        StartCoroutine(ImmotalCorutine());
         sword.Hp -= 1;
         Debug.Log("¾ÆÆÄ¿ä");
         playerMove.animator.SetTrigger("doHit");
@@ -64,6 +73,12 @@ public class GameManager : MonoBehaviour
             playerMove.animator.SetTrigger("doDie");
             isGameOver = true;
         }
+    }
+
+    IEnumerator ImmotalCorutine()
+    {
+        yield return new WaitForSeconds(1);
+        playerMove.immortal=false;
     }
     public void fallDamage()
     {

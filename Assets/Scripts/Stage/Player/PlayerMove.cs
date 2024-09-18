@@ -2,32 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerMove : MonoBehaviour
 {
-    //이동
+    public float jumpPower;     //점프력
+    private float scaleX;
+
+    private Vector2 StartPoint;
+    [SerializeField]
+    private int jumpCount;
+
+    public LayerMask Mask;
     public float movePower;     //이속
     //대쉬
     protected float dashForce = 20f;
     protected float dashDuration = 0.1f;
     public float dashCooldown = 3f;
-    private bool isDash = false;
+    public bool isDash = false;
     private float dashTimeLeft;
     private float lastDashTime;
 
     protected Rigidbody2D rb;
     public Animator animator;
     protected Collider2D Playercollider2D;
-    private EnemyHp enemyHp;
     SpriteRenderer render;
-
-    Vector3 leftV = new Vector3(-1, 1, 1);
-    Vector3 rightV = new Vector3(1, 1, 1);
 
     [SerializeField]
     ParticleSystem moveEffect;
     [SerializeField]
     private GameManager gameManager;
+
+    public bool immortal=false;
 
     protected void Awake()
     {
@@ -36,9 +42,13 @@ public class PlayerMove : MonoBehaviour
         animator = GetComponent<Animator>();
         Playercollider2D = GetComponent<Collider2D>();
     }
+    private void Start()
+    {
+        jumpPower = 5f;
+        jumpCount = 0;
+    }
     private void Update()
     { 
-        //대쉬
         if (Input.GetButtonDown("Dash") && !isDash && Time.time >= lastDashTime + dashCooldown)
         {
             StartDash();
@@ -56,6 +66,15 @@ public class PlayerMove : MonoBehaviour
         }
         //이동
         Move();
+
+        scaleX = transform.localScale.x;
+
+        GroundCheck();
+
+        if (Input.GetButtonDown("JumpC"))
+        {
+            JumpAction();
+        }
     }
     public void StartDash()
     {
@@ -82,12 +101,12 @@ public class PlayerMove : MonoBehaviour
     }
     private void Move()
     {
-        Vector3 moveVelocity = Vector3.zero;
+        float movedir = 0;
 
         if (Input.GetAxisRaw("Horizontal") < 0)
         {
             animator.SetTrigger("doMove");
-            moveVelocity = Vector3.left;
+            movedir = -1;
             render.flipX = true;//transform.localScale = leftV;
             if (!moveEffect.isPlaying)
             {
@@ -97,7 +116,7 @@ public class PlayerMove : MonoBehaviour
         else if (Input.GetAxisRaw("Horizontal") > 0)
         {
             animator.SetTrigger("doMove");
-            moveVelocity = Vector3.right;
+            movedir = 1;
             render.flipX = false;//transform.localScale = rightV;
             if (!moveEffect.isPlaying)
             {
@@ -112,7 +131,43 @@ public class PlayerMove : MonoBehaviour
                 moveEffect.Stop();
             }
         }
+        if (!isDash)
+        {
+            rb.velocity = new Vector2(movedir * movePower, rb.velocity.y);
+        }
+        //this.transform.position += movedir * movePower * Time.deltaTime;
+    }
+    private void JumpAction()
+    {
+        if (jumpCount == 0)
+        {//1단점프
+            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpCount = 1;
+        }
+        if (jumpCount == 1)
+        {//2단점프
+            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            jumpCount = 2;
+        }
+    }
+    private void GroundCheck()
+    {
+        float RayLength = 0.3f;
+        if (scaleX == -1)//왼쪽을 보는중
+        {
+            StartPoint = new Vector2(Playercollider2D.bounds.center.x + Playercollider2D.bounds.extents.x, Playercollider2D.bounds.min.y);
+        }
 
-        this.transform.position += moveVelocity * movePower * Time.deltaTime;
+        else if (scaleX == 1)
+        {
+            StartPoint = new Vector2(Playercollider2D.bounds.center.x - Playercollider2D.bounds.extents.x, Playercollider2D.bounds.min.y);
+        }
+        Debug.DrawRay(StartPoint, Vector2.down * RayLength, Color.red); // 디버그 레이
+        RaycastHit2D hit = Physics2D.Raycast(StartPoint, Vector2.down, RayLength, Mask);
+
+        if (hit.collider != null)
+        {
+            jumpCount = 0;
+        }
     }
 }

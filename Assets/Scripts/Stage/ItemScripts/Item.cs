@@ -10,7 +10,6 @@ public class Item : ScriptableObject
 
     PlayerStatus playerStatus;
     PlayerMove move;
-    Jump jump;
 
     public int attackBonus;
     public int maxHpBonus;
@@ -37,7 +36,7 @@ public class Item : ScriptableObject
         playerStatus.CritPer += item.critperBonus;
         playerStatus.gold += item.goldBonus;
         //∞Ò»π¡ı∞° +
-        jump.jumpPower += item.jumpBonus;
+        move.jumpPower += item.jumpBonus;
         move.movePower += item.speedBonus;
     }
 
@@ -51,7 +50,7 @@ public class Item : ScriptableObject
         playerStatus.CritDam -= item.critDamBonus;
         playerStatus.CritPer -= item.critperBonus;
         //∞Ò»π¡ı∞° -
-        jump.jumpPower -= item.jumpBonus;
+        move.jumpPower -= item.jumpBonus;
         move.movePower -= item.speedBonus;
     }
 }

@@ -18,7 +18,7 @@ public class Attack : MonoBehaviour
     void Update()
     {
         if (curTime <= 0)
-        {//°ø¼Ó
+        {
             if (Input.GetButtonDown("Attack"))
             {
                 animator.SetTrigger("doAttack");

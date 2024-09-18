@@ -24,7 +24,7 @@ public class PlayerStatus : MonoBehaviour
     public int maxHp;           //최대채력
     public int Hp;           //체력
     public int CritPer;       //크확
-    public int CritDam;       //크뎀
+    public int CritDam;       //크뎀 
     public int gold;        
     
     protected PlayerMove playerMove;
