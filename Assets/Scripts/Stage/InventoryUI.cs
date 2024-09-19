@@ -9,6 +9,8 @@ public class InventoryUI : MonoBehaviour
     GameObject mainInventory;
     [SerializeField]
     GameObject itemExplain;
+    [SerializeField]
+    private StatusUI statusUI;
 
     [SerializeField]
     public GameObject inventoryPanel;  // 인벤토리 패널
@@ -35,8 +37,6 @@ public class InventoryUI : MonoBehaviour
         maintrue = false;
         itemExTrue = false;
 
-        string ItemName = ItemImage.sprite.name;
-
         UpdateInventoryUI();
 
     }
@@ -44,35 +44,28 @@ public class InventoryUI : MonoBehaviour
     {
         if (Input.GetButtonDown("Inventory"))
         {
-            Debug.Log("인밴 열려고 함");
             if (maintrue)
             {
-                Debug.Log("인밴 열기");
-                //다 꺼버리기
                 mainInventory.SetActive(false);
                 itemExplain.SetActive(false);
                 maintrue = false;
             }
             else if (!maintrue) 
             {
-                Debug.Log("인밴 닫기");
-                //키기
+                statusUI.MainUIUpdate();
                 mainInventory.SetActive(true);
                 maintrue = true;
             } 
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //끄기
             if (itemExTrue) 
             {
-                //아이템 설명이 켜져있으면 아이템 설명만 끈다.
                 itemExplain.SetActive(false);
                 itemExTrue = false;
             }
             else if (!itemExTrue)
             {
-                //아이템 설명이 꺼져있으면 메인 인벤토리를 끈다.
                 mainInventory.SetActive(false);
                 itemExTrue = false;
             }
@@ -82,7 +75,7 @@ public class InventoryUI : MonoBehaviour
     {
         
     }
-    public void ClearSlot()
+    public void ClearSlot(Item item)
     {
 
     }

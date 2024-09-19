@@ -48,32 +48,35 @@ public class PlayerMove : MonoBehaviour
         jumpCount = 0;
     }
     private void Update()
-    { 
-        if (Input.GetButtonDown("Dash") && !isDash && Time.time >= lastDashTime + dashCooldown)
+    {
+        if (!gameManager.isGameOver)
         {
-            StartDash();
-        }
-        if (isDash)
-        {
-            if (dashTimeLeft > 0)
+            if (Input.GetButtonDown("Dash") && !isDash && Time.time >= lastDashTime + dashCooldown)
             {
-                dashTimeLeft -= Time.deltaTime;
+                StartDash();
             }
-            else
+            if (isDash)
             {
-                EndDash();
+                if (dashTimeLeft > 0)
+                {
+                    dashTimeLeft -= Time.deltaTime;
+                }
+                else
+                {
+                    EndDash();
+                }
             }
-        }
-        //이동
-        Move();
+            //이동
+            Move();
 
-        scaleX = transform.localScale.x;
+            scaleX = transform.localScale.x;
 
-        GroundCheck();
+            GroundCheck();
 
-        if (Input.GetButtonDown("JumpC"))
-        {
-            JumpAction();
+            if (Input.GetButtonDown("JumpC"))
+            {
+                JumpAction();
+            }
         }
     }
     public void StartDash()

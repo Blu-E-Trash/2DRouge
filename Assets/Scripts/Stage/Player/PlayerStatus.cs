@@ -16,9 +16,11 @@ public class PlayerStatus : MonoBehaviour
     public Image UIcharacterImage;
     [SerializeField]
     private Text ExText;
+    [SerializeField]
+    private GameManager gm;
     public Sprite UpgradedClass; //업글 후의 초상화
-
-    protected int UpgradCount;
+    
+    public int UpgradCount;
 
     public float Damage;       //공격력
     public int maxHp;           //최대채력
@@ -27,20 +29,47 @@ public class PlayerStatus : MonoBehaviour
     public int CritDam;       //크뎀 
     public int gold;        
     
-    protected PlayerMove playerMove;
+    private PlayerMove playerMove;
 
-    [SerializeField]
-    StatusUI statusUI;
-
-    public void Awake()
+    public void Start()
     {
+        playerMove = GetComponent<PlayerMove>();
         SystemMassageGO.SetActive(false);
-        gold = 100;
-        UpgradCount = 0;
-        Hp = maxHp;
-        statusUI.HpText.text = "Hp:" + maxHp.ToString() + "/" + Hp.ToString();
+
+        Damage = 100;
+        playerMove.movePower = 5;
+        CritPer = 20;
+        CritDam = 150;
+        
+        if (gm.playerMaxHp == 0)
+            maxHp = 6;
+        else
+            maxHp = gm.playerMaxHp;
+        
+        if (gm.playerGold == 0)
+            gold = 100;
+        else
+            gold = gm.playerGold;
+
+        if (!gm.isUpgrade)
+            UpgradCount = 0;
+        else
+            UpgradCount = 1;
+
+        if (gm.playerHp == 0)
+            Hp = maxHp;
+        else
+            Hp = gm.playerHp;
     }
-    
+    private void Update()
+    {
+        if (Hp <= 0)
+        {
+            playerMove.animator.SetTrigger("doDie");
+            gm.isGameOver = true;
+        }
+    }
+
     public void UpgradeClass()
     {
         if (UpgradCount<1 && gold >= 1000)
@@ -55,7 +84,7 @@ public class PlayerStatus : MonoBehaviour
             CritDam += 30;
             CritPer += 20;
             playerMove.dashCooldown -= 1;
-            ExText.text = "기사";
+            ExText.text = "정식";
         }
         else if (UpgradCount != 0)
         {

@@ -41,8 +41,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5822260344825245674}
   - component: {fileID: 3601175004811927058}
+  - component: {fileID: 3005361078576666007}
   - component: {fileID: 8193237346940618598}
-  - component: {fileID: 4643598080732112946}
   - component: {fileID: 6804958804223894905}
   - component: {fileID: 6942319556966286350}
   - component: {fileID: 5788508210673554899}
@@ -87,6 +87,33 @@ MonoBehaviour:
   inventoryItems: []
   maxSlots: 6
   inventorySlots: {fileID: 0}
+--- !u!114 &3005361078576666007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4294203957125512626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6be752d9d2fb1144f802d06ba93afdd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  systemMassage: {fileID: 0}
+  SystemMassageGO: {fileID: 0}
+  characterImage: {fileID: 0}
+  UIcharacterImage: {fileID: 0}
+  ExText: {fileID: 0}
+  gm: {fileID: 0}
+  UpgradedClass: {fileID: 4545135470104253956, guid: 3765a367fb48f9040bca18add088d6d3, type: 3}
+  UpgradCount: 0
+  Damage: 100
+  maxHp: 6
+  Hp: 6
+  CritPer: 20
+  CritDam: 150
+  gold: 100
+  statusUI: {fileID: 0}
 --- !u!114 &8193237346940618598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,38 +130,14 @@ MonoBehaviour:
   jumpCount: 0
   Mask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   movePower: 5
   dashCooldown: 3
   isDash: 0
   animator: {fileID: 5788508210673554899}
   moveEffect: {fileID: 8809723502464069103}
   gameManager: {fileID: 0}
---- !u!114 &4643598080732112946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4294203957125512626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a573a9fbd71c824c82dab03290d7997, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  systemMassage: {fileID: 0}
-  SystemMassageGO: {fileID: 0}
-  characterImage: {fileID: 0}
-  UIcharacterImage: {fileID: 0}
-  ExText: {fileID: 0}
-  UpgradedClass: {fileID: 4545135470104253956, guid: 3765a367fb48f9040bca18add088d6d3, type: 3}
-  Damage: 100
-  maxHp: 6
-  Hp: 6
-  CritPer: 20
-  CritDam: 150
-  gold: 1000
-  statusUI: {fileID: 0}
+  immortal: 0
 --- !u!114 &6804958804223894905
 MonoBehaviour:
   m_ObjectHideFlags: 0
