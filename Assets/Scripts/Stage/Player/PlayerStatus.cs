@@ -27,6 +27,7 @@ public class PlayerStatus : MonoBehaviour
     public int Hp;           //Ã¼·Â
     public int CritPer;       //Å©È®
     public int CritDam;       //Å©µ© 
+    public float goldBonus;     //°ñÈ¹
     public int gold;        
     
     private PlayerMove playerMove;
@@ -40,7 +41,7 @@ public class PlayerStatus : MonoBehaviour
         playerMove.movePower = 5;
         CritPer = 20;
         CritDam = 150;
-        
+        goldBonus = 1f;
         if (gm.playerMaxHp == 0)
             maxHp = 6;
         else

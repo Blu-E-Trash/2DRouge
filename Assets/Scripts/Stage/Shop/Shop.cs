@@ -36,9 +36,9 @@ public class Shop : MonoBehaviour
 
     private Item itemScript;
     [SerializeField]
-    Inventory inventory;
-    [SerializeField]
     PlayerStatus playerStatus;
+    [SerializeField]
+    private StatusUI statusUI;
     public Item selectedItem;         // 플레이어가 선택한 아이템
 
 
@@ -50,7 +50,6 @@ public class Shop : MonoBehaviour
         SellingItemExplain.SetActive(false);
         ShopUI.SetActive(false);
 
-        inventory = Inventory.Instance;
         playerStatus = FindObjectOfType<PlayerStatus>();
         PopulateSellSlots();
     }
@@ -92,21 +91,14 @@ public class Shop : MonoBehaviour
     }
     public void PurchaseSelectedItem()
     {
-        Debug.Log(selectedItem.itemName);
         if (playerStatus.gold >= selectedItem.itemPrice)
-        {
-            if (inventory.inventoryItems.Count < inventory.maxSlots)
-            {
-                gameManager.AddItemtoInventory(selectedItem);
-                playerStatus.gold -= selectedItem.itemPrice;
-                selectedItem = null;
-            }
-            else
-            {
-                SystemMassageGO.SetActive(true);
-                systemMassage.text = "가방에 공간이 부족합니다.";
-                Invoke("Out", 2f);
-            }
+        {   
+            gameManager.AddItemtoInventory();
+            playerStatus.gold -= selectedItem.itemPrice;
+            statusUI.BasicUIUpdate();
+            gameManager.GoldSyncronization();
+            
+            selectedItem = null;
         }
         else
         {
@@ -118,6 +110,7 @@ public class Shop : MonoBehaviour
 
     public void closeShop()
     {
+        SellingItemExplain.SetActive(false);
         ShopUI.SetActive(false);
     }
     private void Out()

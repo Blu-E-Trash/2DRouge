@@ -23,22 +23,24 @@ public class InventoryUI : MonoBehaviour
     public Text ExItemDescriptionText; //추임세 택스트
     [SerializeField]
     public Text ExItemText; // 아이템의 효과 텍스트
+    [SerializeField]
+    public Button[] slotButton = new Button[6];
+    [SerializeField]
+    private GameManager gameManager;
+    public Item IselectedItem;
 
-    private Image ItemImage;  //메인 인밴토리의 아이템 이미지
 
     private bool maintrue;
     private bool itemExTrue;
 
     private void Start()
     {
+        
         mainInventory.SetActive(false);
         itemExplain.SetActive(false);
 
         maintrue = false;
         itemExTrue = false;
-
-        UpdateInventoryUI();
-
     }
     private void Update()
     {
@@ -71,17 +73,22 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
-    public void UpdateInventoryUI()
+    public void UpdateInventoryUI(Item item,int i)
     {
-        
+        slotButton[i].image.sprite = item.itemImage;
     }
-    public void ClearSlot(Item item)
+    public void ClearSlot(int i)
     {
-
+        slotButton[i].image.sprite = null;
     }
-    public void ItemExplainFunction(Image ItemName)
+    public void SelecteItem(Item item)
     {
-        if (ItemName.sprite == null)
+        IselectedItem = item;
+        Debug.Log(IselectedItem);
+    }
+    public void ItemExplainFunction(Image itemImage)
+    {
+        if (itemImage.sprite == null)
         {
             ExItemImage.sprite = null;
             ExItemNameText.text = "...";
@@ -90,11 +97,23 @@ public class InventoryUI : MonoBehaviour
             itemExplain.SetActive(true);
             itemExTrue = true;
         }
-        else if (ItemName.sprite != null)
+        else if (itemImage.sprite != null)
         {
-            ChangeImageAndText(ItemName);   
+            ChangeImageAndText(itemImage);   
             itemExplain.SetActive(true);
             itemExTrue = true;
+        }
+    }
+    public void RemoveItem()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if (gameManager.inventory[i] == IselectedItem)
+            {
+                ClearSlot(i);
+                gameManager.RemoveEffect(IselectedItem);
+                return;
+            }
         }
     }
     public void ChangeImageAndText(Image ItemName)
@@ -117,11 +136,6 @@ public class InventoryUI : MonoBehaviour
                 ExItemNameText.text = "용의 눈";
                 ExItemDescriptionText.text = "생전 강력했던 몬스터의 눈이다.";
                 ExItemText.text = "공/마+20%";
-                break;
-            case "Slime Gel":
-                ExItemNameText.text = "슬라임 점액";
-                ExItemDescriptionText.text = "생각보다 쫀쫀하다..?";
-                ExItemText.text = "상점에 판매시 100G 획득";
                 break;
             case "Helm":
                 ExItemNameText.text = "기사의 헬름";
@@ -188,11 +202,6 @@ public class InventoryUI : MonoBehaviour
                 ExItemDescriptionText.text = "스테이크입니다! 비록 고기는 아니지만..";
                 ExItemText.text = "체력 2 회복";
                 break;
-            case "Ham":
-                ExItemNameText.text = "햄";
-                ExItemDescriptionText.text = "판타지의 정석! 한입 크게 하고싶은 생김새!";
-                ExItemText.text = "체력 3회복";
-                break;
             case "Heart":
                 ExItemNameText.text = "생명력";
                 ExItemDescriptionText.text = "화이팅입니다! 응원을 받았습니다!";
@@ -203,11 +212,6 @@ public class InventoryUI : MonoBehaviour
                 ExItemDescriptionText.text = "역하지만 어쩌겠습니까! 살아야죠!";
                 ExItemText.text = "체력 2 회복, 최대체력 1 감소";
                 break;
-            case "Wine":
-                ExItemNameText.text = "와인(용의 숨결)";
-                ExItemDescriptionText.text = "강렬하고 강력한 맛! 용의 숨결처럼 뜨겁고 화려한 와인!";
-                ExItemText.text = "상점에 판매시 500G획득";
-                break;
             case "Copper Coin":
                 ExItemNameText.text = "동화";
                 ExItemDescriptionText.text = "흔한 동화입니다.";
@@ -217,11 +221,6 @@ public class InventoryUI : MonoBehaviour
                 ExItemNameText.text = "금화";
                 ExItemDescriptionText.text = "당신도 이제 부자!";
                 ExItemText.text = "골드 획득량 25% 증가";
-                break;
-            case "Golden Ingot":
-                ExItemNameText.text = "골드바";
-                ExItemDescriptionText.text = "진짜 골드바! 초콜릿은 아닐겁니다..";
-                ExItemText.text = "300G 획득";
                 break;
             case "Silver Coin":
                 ExItemNameText.text = "은화";

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyHp : MonoBehaviour
@@ -10,9 +11,14 @@ public class EnemyHp : MonoBehaviour
     private float currentHP;
     public bool isDead;
 
-    Animator animator;
-    PlayerStatus playerStatus;
-    EnemyMove enemyMove;
+    [SerializeField]
+    private StatusUI statusUI;
+    [SerializeField]
+    private GameManager gameManager;
+
+    private Animator animator;
+    private PlayerStatus playerStatus;
+    private EnemyMove enemyMove;
 
     public float MaxHP => maxHP;
     public float CurrentHP => currentHP;
@@ -22,7 +28,7 @@ public class EnemyHp : MonoBehaviour
         currentHP = maxHP;
         animator = GetComponent<Animator>();
         playerStatus = FindObjectOfType<PlayerStatus>();
-        enemyMove = FindObjectOfType<EnemyMove>();
+        enemyMove = GetComponent<EnemyMove>();
     }
     public void mobDamaged()
     {
@@ -35,14 +41,11 @@ public class EnemyHp : MonoBehaviour
         else if (currentHP <= 0)
         {
             animator.SetBool("Dead", true);
-            playerStatus.gold += 30;
-            Invoke("DestoryEnemy", 2);
+            playerStatus.gold += Mathf.FloorToInt(playerStatus.goldBonus*Random.Range(25,35));
+            gameManager.GoldSyncronization();
+            statusUI.BasicUIUpdate();
             isDead = true;
         }
-    }
-    private void DestoryEnemy()
-    {
-        Destroy(this);
     }
     private void Stop()
     {

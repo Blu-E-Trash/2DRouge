@@ -11,14 +11,19 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Text SystemMassage;
     [SerializeField]
+    private GameObject systemMassage;
+    [SerializeField]
     private PlayerMove playerMove;
     [SerializeField]
     private PlayerStatus playerStatus;
+    [SerializeField]
+    private Shop shop;
     [SerializeField]
     private StatusUI statusUI;
     [SerializeField]
     private GameObject gameOverUI;
     public bool isGameOver;
+
 
     [SerializeField]
     private Transform playerpos;
@@ -27,12 +32,15 @@ public class GameManager : MonoBehaviour
     public int playerGold;      //골드
     public int playerMaxHp;     //최대채력
     public int playerHp;        //채력
-    public Item[] inventory;     //인벤은 바뀔수도 있음;
+    public Item[] inventory = new Item[6];     //인벤은 바뀔수도 있음;
+    private float Setfalse;
+    [SerializeField]
     private InventoryUI inventoryUI;
 
 
     private void Awake()
     {
+        systemMassage.SetActive(false);
         gameOverUI.SetActive(false);
         isGameOver = false;
         if (Instance == null) { 
@@ -42,8 +50,6 @@ public class GameManager : MonoBehaviour
         else if(Instance != this)
            Destroy(gameObject);
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (isGameOver)
@@ -117,30 +123,65 @@ public class GameManager : MonoBehaviour
         playerStatus.Hp -= 1;
         playerpos.position = new Vector3(-10, -3, -1);
         HpSyncronization();
+        statusUI.BasicUIUpdate();
     }
-    public void AddItemtoInventory(Item item)
+    public void AddItemtoInventory()
     {
         for (int i = 0; i < 6; i++)
         {
             if (inventory[i] == null)
             {
-                inventory[i] = item;
-                inventoryUI.UpdateInventoryUI();
+                inventory[i] = shop.selectedItem;
+                if (inventory[i].itemName == "Beer" || inventory[i].itemName == "Bread" || inventory[i].itemName == "Fish Steak" || inventory[i].itemName == "Monster Meat")
+                {
+                    ApplyEffect(inventory[i]);
+                    inventoryUI.IselectedItem = inventory[i];
+                    inventoryUI.RemoveItem();
+                    return;
+                }
+                inventoryUI.UpdateInventoryUI(inventory[i],i);
+
+                ApplyEffect(inventory[i]);
+                inventoryUI.slotButton[i].onClick.AddListener(() => inventoryUI.SelecteItem(inventory[i]));
+
                 return;
             }
         }
-        //시메 온하는거 띄우기
+        systemMassage.SetActive(true);
+        Setfalse += Time.deltaTime;
         SystemMassage.text = "인벤토리가 꽉 찼습니다.";
-    }
-    public void RemoveItem(Item item)
-    {
-        for (int i = 0; i < 6; i++)
+        if (Setfalse == 2.0)
         {
-            if (item.itemName == inventory[i].itemName)
-            {
-                inventory[i] = null;
-            }
+            systemMassage.SetActive(false);
+            Setfalse = 0f;
         }
-        inventoryUI.ClearSlot(item);
+    }
+
+    public void ApplyEffect(Item item)
+    {
+
+        playerStatus.Damage += item.attackBonus;
+        playerStatus.maxHp += item.maxHpBonus;
+        playerStatus.Hp += item.hpHeal;
+        if (playerStatus.Hp > playerStatus.maxHp)
+        {
+            playerStatus.Hp = playerStatus.maxHp;
+        }
+        playerStatus.CritDam += item.critDamBonus;
+        playerStatus.CritPer += item.critperBonus;
+        playerStatus.goldBonus += item.getGoldBonus;
+        playerMove.jumpPower += item.jumpBonus;
+        playerMove.movePower += item.speedBonus;
+    }
+
+    public void RemoveEffect(Item item)
+    {
+        playerStatus.Damage -= item.attackBonus;
+        playerStatus.maxHp -= item.maxHpBonus;
+        playerStatus.CritDam -= item.critDamBonus;
+        playerStatus.CritPer -= item.critperBonus;
+        playerStatus.goldBonus -= item.getGoldBonus;
+        playerMove.jumpPower -= item.jumpBonus;
+        playerMove.movePower -= item.speedBonus;
     }
 }
