@@ -28,7 +28,6 @@ public class Attack : MonoBehaviour
                     if (collider.CompareTag("Mob"))
                     {
                         enemyHp = collider.GetComponent<EnemyHp>();
-                        Debug.Log(collider.name);
                         enemyHp.mobDamaged();
                     }
                 }

@@ -2127,6 +2127,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TutorialUI: {fileID: 1164270388}
+  Tutorial: {fileID: 234585995}
+  startUI: {fileID: 142873075}
+  Save: {fileID: 2116100006}
+  Load: {fileID: 1309942954}
+  Quit: {fileID: 1668315759}
 --- !u!1 &509783303
 GameObject:
   m_ObjectHideFlags: 0

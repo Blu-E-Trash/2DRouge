@@ -34,7 +34,6 @@ public class Shop : MonoBehaviour
     [SerializeField]
     private Button[] buttons;
 
-    private Item itemScript;
     [SerializeField]
     PlayerStatus playerStatus;
     [SerializeField]
@@ -55,12 +54,14 @@ public class Shop : MonoBehaviour
     }
     private void Update()
     {
-        if (itemExTrue)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if(itemExTrue)
             {
                 SellingItemExplain.SetActive(false);
+                return;
             }
+            ShopUI.SetActive(false);
         }
     }
     private void PopulateSellSlots()
