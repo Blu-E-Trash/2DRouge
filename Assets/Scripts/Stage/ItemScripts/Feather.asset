@@ -18,11 +18,8 @@ MonoBehaviour:
   maxHpBonus: 0
   hpHeal: 0
   speedBonus: 2
-  jumpBonus: 0
+  jumpBonus: 2
   critDamBonus: 0
   critperBonus: 0
-  goldBonus: 0
-  getGoldBonus: 150
+  getGoldBonus: 0
   itemPrice: 75
-  sellPrice: 0
-  inInventory: 0

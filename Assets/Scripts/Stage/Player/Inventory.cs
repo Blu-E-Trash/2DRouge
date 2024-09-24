@@ -12,7 +12,6 @@ public class Inventory : MonoBehaviour
     private Shop shop;
     [SerializeField]
     private InventoryUI inventoryUI;
-    private float Setfalse;
     [SerializeField]
     private Text SystemMassage;
     [SerializeField]
@@ -40,13 +39,12 @@ public class Inventory : MonoBehaviour
             }
         }
         systemMassage.SetActive(true);
-        Setfalse += Time.deltaTime;
+        Invoke("TurnOffMassage",1f);
         SystemMassage.text = "¿Œ∫•≈‰∏Æ∞° ≤À √°Ω¿¥œ¥Ÿ.";
-        if (Setfalse == 2.0)
-        {
-            systemMassage.SetActive(false);
-            Setfalse = 0f;
-        }
+    }
+    private void TurnOffMassage()
+    {
+        systemMassage.SetActive(false);
     }
     private void OnEnable()
     {

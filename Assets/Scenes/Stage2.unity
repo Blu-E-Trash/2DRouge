@@ -9887,6 +9887,7 @@ MonoBehaviour:
   - {fileID: 2024939003}
   - {fileID: 1878458925}
   playerStatus: {fileID: 1874493415}
+  shopOpen: {fileID: 761865159608413508}
   statusUI: {fileID: 163657718}
   selectedItem: {fileID: 0}
 --- !u!1 &1632899226
@@ -11090,8 +11091,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -49.54541}
-  m_SizeDelta: {x: 854, y: 154}
+  m_AnchoredPosition: {x: 0, y: -55}
+  m_SizeDelta: {x: 954, y: 154}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1846464001
 MonoBehaviour:
@@ -12020,8 +12021,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -49.54541}
-  m_SizeDelta: {x: 854, y: 154}
+  m_AnchoredPosition: {x: 0, y: -55}
+  m_SizeDelta: {x: 954, y: 154}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2038149835
 MonoBehaviour:
@@ -15238,6 +15239,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea703528117bdba438301c5e10495a32, type: 3}
+--- !u!114 &761865159608413508 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 990727701778174609, guid: ea703528117bdba438301c5e10495a32, type: 3}
+  m_PrefabInstance: {fileID: 761865159608413507}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b385d2a40786984eb611e873a946553, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

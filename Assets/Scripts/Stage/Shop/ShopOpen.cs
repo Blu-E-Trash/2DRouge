@@ -8,14 +8,18 @@ public class ShopOpen : MonoBehaviour
     [SerializeField]
     private Shop shop;
     public bool canOpen;
+    public bool isOpening;
 
     private void Update()
     {
         if (canOpen)
         {
-            if (Input.GetKeyDown(KeyCode.F))
+            if (!isOpening)
             {
-                Open();
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    Open();
+                }
             }
         }
         if (!canOpen)
@@ -35,15 +39,18 @@ public class ShopOpen : MonoBehaviour
         if(collision.tag == "Player")
         {
             canOpen = false;
+            isOpening = false;
         }
     }
     public void Open()
     {
         shop.ShopUI.SetActive(true);
         shop.itemPrice.text = "구매하기";
+        isOpening = true;
     }
     public void Close()
     {
         shop.ShopUI.SetActive(false);
+        isOpening = false;
     }
 }

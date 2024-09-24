@@ -26,7 +26,7 @@ public class PlayerStatus : MonoBehaviour
     public int UpgradCount;
     public float jumpPower;     //점프력
     public float Damage;       //공격력
-    public int maxHp;           //최대채력
+    public int maxHp;           //최대체력
     public int Hp;           //체력
     public int CritPer;       //크확
     public float CritDam;       //크뎀 

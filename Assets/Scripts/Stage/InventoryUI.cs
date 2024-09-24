@@ -149,27 +149,27 @@ public class InventoryUI : MonoBehaviour
             case "Helm":
                 ExItemNameText.text = "기사의 헬름";
                 ExItemDescriptionText.text = "이름모를 기사가 사용했던 헬름이다.";
-                ExItemText.text = "공격력 +10,최대채력 +2";
+                ExItemText.text = "공격력 +10,최대체력 +2";
                 break;
             case "Iron Armor":
                 ExItemNameText.text = "철갑옷";
                 ExItemDescriptionText.text = "든든하지만 몸이 무거워진다.";
-                ExItemText.text = "최대채력 +2, 이동속도 -1";
+                ExItemText.text = "최대체력 +2, 이동속도 -1";
                 break;
             case "Iron Boot":
                 ExItemNameText.text = "철군화";
                 ExItemDescriptionText.text = "발이 긁힐 위험은 없어졌지만, 좀 무겁다..";
-                ExItemText.text = "최대채력 +1, 이동속도 -1";
+                ExItemText.text = "최대체력 +1, 이동속도 -1";
                 break;
             case "Iron Helmet":
                 ExItemNameText.text = "철모";
                 ExItemDescriptionText.text = "머리가 안전해진 것이 든든하다.";
-                ExItemText.text = "최대채력 +2";
+                ExItemText.text = "최대체력 +2";
                 break;
             case "Leather Armor":
                 ExItemNameText.text = "가죽갑옷";
                 ExItemDescriptionText.text = "질긴 가죽으로 만들어 가볍다.";
-                ExItemText.text = "최대채력 +1, 치명타확률 +10%";
+                ExItemText.text = "최대체력 +1, 치명타확률 +10%";
                 break;
             case "Leather Boot":
                 ExItemNameText.text = "가죽장화";
@@ -184,7 +184,7 @@ public class InventoryUI : MonoBehaviour
             case "Skull":
                 ExItemNameText.text = "두개골";
                 ExItemDescriptionText.text = "야만인이 된듯한 기분..글로리아!!";
-                ExItemText.text = "공격력 +50,최대채력 -3";
+                ExItemText.text = "공격력 +50,최대체력 -3";
                 break;
             case "Wizard Hat":
                 ExItemNameText.text = "마녀의 모자";
