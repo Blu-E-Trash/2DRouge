@@ -26,7 +26,8 @@ public class Shop : MonoBehaviour
     public Text systemMassage;
     [SerializeField]
     public Text itemPrice;
-
+    [SerializeField]
+    private Inventory inventory;
     public List<Item> availableItems;  // 상점에서 판매 가능한 아이템 목록
     public Item[] sellSlots;           // 판매 셀을 담당하는 UI 슬롯들
     [SerializeField]
@@ -39,16 +40,15 @@ public class Shop : MonoBehaviour
     [SerializeField]
     private StatusUI statusUI;
     public Item selectedItem;         // 플레이어가 선택한 아이템
+    private int SelectNum;
 
 
-    [SerializeField]
     private GameManager gameManager;
 
-    private void Start()
+    private void Awake()
     { 
         SellingItemExplain.SetActive(false);
         ShopUI.SetActive(false);
-
         playerStatus = FindObjectOfType<PlayerStatus>();
         PopulateSellSlots();
     }
@@ -56,12 +56,15 @@ public class Shop : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(itemExTrue)
+            if (!itemExTrue)
+            {
+                ShopUI.SetActive(false);
+            }
+            else if(itemExTrue)
             {
                 SellingItemExplain.SetActive(false);
-                return;
+                itemExTrue = false;
             }
-            ShopUI.SetActive(false);
         }
     }
     private void PopulateSellSlots()
@@ -72,34 +75,56 @@ public class Shop : MonoBehaviour
             int randomItem = UnityEngine.Random.Range(0, availableItems.Count);
             sellSlots[i] = availableItems[randomItem];
             shopbt[i].ChangeImage(sellSlots[i]);
-            buttons[i].onClick.AddListener(()=>SelectItem(sellSlots[temp]));
+            buttons[i].onClick.AddListener(()=>SelectItem(sellSlots[temp],temp));
         }
     }
-    // 아이템 선택
-    public void SelectItem(Item item)
+
+    public void SelectItem(Item item,int i)
     {
         if (item != null)
         {
-            selectedItem = item;                              //아이템 설정함
-            itemPrice.text = "$" + selectedItem.itemPrice.ToString(); //가격 설정
+            selectedItem = item;                             
+            itemPrice.text = "$" + selectedItem.itemPrice.ToString(); 
             
-            //설명 이미지
-            ChangeText(selectedItem.itemName);                   //이미지 변경
+            ChangeText(selectedItem.itemName);                  
             ExItemImage.sprite = selectedItem.itemImage;
             SellingItemExplain.SetActive(true);
             itemExTrue = true;
+            SelectNum = i;
         }
     }
     public void PurchaseSelectedItem()
     {
+        gameManager = FindAnyObjectByType<GameManager>();
         if (playerStatus.gold >= selectedItem.itemPrice)
-        {   
-            gameManager.AddItemtoInventory();
-            playerStatus.gold -= selectedItem.itemPrice;
-            statusUI.BasicUIUpdate();
-            gameManager.GoldSyncronization();
-            
-            selectedItem = null;
+        {
+            if (selectedItem.itemName == "Beer" || selectedItem.itemName == "Bread" || selectedItem.itemName == "Fish Steak" || selectedItem.itemName == "Monster Meat")
+            {
+                playerStatus.ApplyEffect(selectedItem);
+                playerStatus.gold -= selectedItem.itemPrice;
+                statusUI.BasicUIUpdate();
+                statusUI.MainUIUpdate();
+                gameManager.GoldSyncronization();
+                gameManager.HpSyncronization();
+
+                sellSlots[SelectNum]= null;
+                selectedItem = null;
+                shopbt[SelectNum].ChangeImage(sellSlots[SelectNum]);
+                SellingItemExplain.SetActive(false);
+            }
+            else
+            {
+                inventory.AddItemtoInventory();
+                playerStatus.gold -= selectedItem.itemPrice;
+                statusUI.BasicUIUpdate();
+                gameManager.InventorySyncronization();
+                gameManager.GoldSyncronization();
+
+                shopbt[SelectNum].sellItemImage.sprite = null;
+                sellSlots[SelectNum] = null;
+                selectedItem = null;
+                SellingItemExplain.SetActive(false);
+            }
         }
         else
         {
@@ -125,7 +150,7 @@ public class Shop : MonoBehaviour
             case "Rune Stone":
                 ExItemNameText.text = "룬스톤";
                 ExItemDescriptionText.text = "고대 룬이 새겨진 돌쪼가리";
-                ExItemText.text = "공/마 +10%";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Feather":
                 ExItemNameText.text = "천사의 깃털";
@@ -135,17 +160,12 @@ public class Shop : MonoBehaviour
             case "Monster Eye":
                 ExItemNameText.text = "용의 눈";
                 ExItemDescriptionText.text = "생전 강력했던 몬스터의 눈이다.";
-                ExItemText.text = "공/마+20%";
-                break;
-            case "Slime Gel":
-                ExItemNameText.text = "슬라임 점액";
-                ExItemDescriptionText.text = "생각보다 쫀쫀하다..?";
-                ExItemText.text = "상점에 판매시 100G 획득";
-                break;
+                ExItemText.text = "공격력 +20";
+                break;;
             case "Helm":
                 ExItemNameText.text = "기사의 헬름";
                 ExItemDescriptionText.text = "이름모를 기사가 사용했던 헬름이다.";
-                ExItemText.text = "공격력 +10%,최대채력 +2";
+                ExItemText.text = "공격력 +10,최대채력 +2";
                 break;
             case "Iron Armor":
                 ExItemNameText.text = "철갑옷";
@@ -180,12 +200,12 @@ public class Shop : MonoBehaviour
             case "Skull":
                 ExItemNameText.text = "두개골";
                 ExItemDescriptionText.text = "야만인이 된듯한 기분..글로리아!!";
-                ExItemText.text = "공격력+50%,최대채력 -3";
+                ExItemText.text = "공격력 +50,최대채력 -3";
                 break;
             case "Wizard Hat":
                 ExItemNameText.text = "마녀의 모자";
                 ExItemDescriptionText.text = "숲의 마녀가 사용하던 모자";
-                ExItemText.text = "공격력+30%";
+                ExItemText.text = "공격력 +30";
                 break;
             case "Beer":
                 ExItemNameText.text = "맥주";
@@ -207,11 +227,6 @@ public class Shop : MonoBehaviour
                 ExItemDescriptionText.text = "스테이크입니다! 비록 고기는 아니지만..";
                 ExItemText.text = "체력 2 회복";
                 break;
-            case "Ham":
-                ExItemNameText.text = "햄";
-                ExItemDescriptionText.text = "판타지의 정석! 한입 크게 하고싶은 생김새!";
-                ExItemText.text = "체력 3회복";
-                break;
             case "Heart":
                 ExItemNameText.text = "생명력";
                 ExItemDescriptionText.text = "화이팅입니다! 응원을 받았습니다!";
@@ -221,11 +236,6 @@ public class Shop : MonoBehaviour
                 ExItemNameText.text = "몬스터 고기";
                 ExItemDescriptionText.text = "역하지만 어쩌겠습니까! 살아야죠!";
                 ExItemText.text = "체력 2 회복, 최대체력 1 감소";
-                break;
-            case "Wine":
-                ExItemNameText.text = "와인(용의 숨결)";
-                ExItemDescriptionText.text = "강렬하고 강력한 맛! 용의 숨결처럼 뜨겁고 화려한 와인!";
-                ExItemText.text = "상점에 판매시 500G획득";
                 break;
             case "Copper Coin":
                 ExItemNameText.text = "동화";
@@ -237,11 +247,6 @@ public class Shop : MonoBehaviour
                 ExItemDescriptionText.text = "당신도 이제 부자!";
                 ExItemText.text = "골드 획득량 25% 증가";
                 break;
-            case "Golden Ingot":
-                ExItemNameText.text = "골드바";
-                ExItemDescriptionText.text = "진짜 골드바! 초콜릿은 아닐겁니다..";
-                ExItemText.text = "300G 획득";
-                break;
             case "Silver Coin":
                 ExItemNameText.text = "은화";
                 ExItemDescriptionText.text = "나름 귀한 동전입니다.";
@@ -250,22 +255,22 @@ public class Shop : MonoBehaviour
             case "Arrow":
                 ExItemNameText.text = "화살";
                 ExItemDescriptionText.text = "그다지 좋은 화살은.. 그래도 기존보다는 좋습니다!";
-                ExItemText.text = "공격력 +10%";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Bow":
                 ExItemNameText.text = "활";
                 ExItemDescriptionText.text = "그다지 좋은 활은… 그래도 기존보다는 좋습니다!\r\n";
-                ExItemText.text = "공격력 +10%";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Emerald Staff":
                 ExItemNameText.text = "에메랄드 스태프";
                 ExItemDescriptionText.text = "에메랄드는 얼마일까요? 마력반응이 빨라집니다!";
-                ExItemText.text = "공격력+15%";
+                ExItemText.text = "공격력+15";
                 break;
             case "Golden Sword":
                 ExItemNameText.text = "화려한 검";
                 ExItemDescriptionText.text = "멋지고 예쁘지만 실용성은 떨어진다. 쓰쓰쓰?";
-                ExItemText.text = "공격력 +5%, 치명타 데미지 +30%";
+                ExItemText.text = "공격력 +5, 치명타 데미지 +30%";
                 break;
             case "Iron Shield":
                 ExItemNameText.text = "강철방패";
@@ -275,7 +280,7 @@ public class Shop : MonoBehaviour
             case "Iron Sword":
                 ExItemNameText.text = "철검";
                 ExItemDescriptionText.text = "평범한 철검. 재미없는 검이다\r\n";
-                ExItemText.text = "공격력 +10%";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Knife":
                 ExItemNameText.text = "암살자의 단검";
@@ -285,17 +290,17 @@ public class Shop : MonoBehaviour
             case "Magic Wand":
                 ExItemNameText.text = "딱총나무 지팡이";
                 ExItemDescriptionText.text = "Avada Kedavra!";
-                ExItemText.text = "마력+50%";
+                ExItemText.text = "공격력 +50";
                 break;
             case "Sapphire Staff":
                 ExItemNameText.text = "사파이어 스태프";
-                ExItemDescriptionText.text = "영롱하네요.. 마법공격력이 상승합니다!";
-                ExItemText.text = "마력 +10%";
+                ExItemDescriptionText.text = "영롱하네요.. 시원한 기분이 듭니다!";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Silver Sword":
                 ExItemNameText.text = "강철검";
                 ExItemDescriptionText.text = "실용적이고 단단한 검.";
-                ExItemText.text = "공격력 +20%";
+                ExItemText.text = "공격력 +20";
                 break;
             case "Wooden Shield":
                 ExItemNameText.text = "나무방패";
@@ -305,12 +310,12 @@ public class Shop : MonoBehaviour
             case "Wooden Staff":
                 ExItemNameText.text = "고목나무 스태프";
                 ExItemDescriptionText.text = "오래된 나무면..안부러지나,,?";
-                ExItemText.text = "마력 +15%";
+                ExItemText.text = "공격력 +15";
                 break;
             case "Wooden Sword":
                 ExItemNameText.text = "나무검";
                 ExItemDescriptionText.text = "꼬꼬마 시절 들고놀던 나무검. 생각보다 단단할지도..?\r\n";
-                ExItemText.text = "공격력 +5%";
+                ExItemText.text = "공격력 +5";
                 break;
         }
     }

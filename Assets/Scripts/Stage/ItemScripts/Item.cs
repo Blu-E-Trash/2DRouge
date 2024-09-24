@@ -13,7 +13,7 @@ public class Item : ScriptableObject
     public int hpHeal;
     public int speedBonus;
     public int jumpBonus;
-    public int critDamBonus;
+    public float critDamBonus;
     public int critperBonus;
     public float getGoldBonus;    //°ñÈ¹ Áõ°¡
     public int itemPrice;       //»ç´Â °¡°Ý

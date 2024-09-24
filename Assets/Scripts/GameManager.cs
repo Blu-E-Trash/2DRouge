@@ -4,54 +4,51 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using UnityEngine.PlayerLoop;
+using System.Net;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    [SerializeField]
-    private Text SystemMassage;
-    [SerializeField]
-    private GameObject systemMassage;
-    [SerializeField]
-    private PlayerMove playerMove;
-    [SerializeField]
-    private PlayerStatus playerStatus;
-    [SerializeField]
-    private Shop shop;
-    [SerializeField]
-    private StatusUI statusUI;
-    [SerializeField]
-    private GameObject gameOverUI;
+
+    public PlayerStatus playerStatus;
+    public StatusUI statusUI;
+    public GameObject gameOverUI;
+    public Inventory inventoryScript;
+    public InventoryUI inventoryUI;
     public bool isGameOver;
+    public bool isVictory;
+    private GameObject player;
+    private Text StageNum;
 
-
-    [SerializeField]
-    private Transform playerpos;
     //저장될 데이터
     public bool isUpgrade;      //승급
     public int playerGold;      //골드
     public int playerMaxHp;     //최대채력
     public int playerHp;        //채력
     public Item[] inventory = new Item[6];     //인벤은 바뀔수도 있음;
-    private float Setfalse;
-    [SerializeField]
-    private InventoryUI inventoryUI;
 
 
+
+    
     private void Awake()
     {
-        systemMassage.SetActive(false);
-        gameOverUI.SetActive(false);
-        isGameOver = false;
         if (Instance == null) { 
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else if(Instance != this)
            Destroy(gameObject);
+        
+        DontDestroyOnLoad(this.gameObject);
+        isGameOver = false;
+        isVictory=false;
     }
     void Update()
     {
+        if(playerStatus.Hp <= 0)
+        {
+            isGameOver = true;
+        }
         if (isGameOver)
         {
             gameOverUI.SetActive(true);
@@ -59,40 +56,19 @@ public class GameManager : MonoBehaviour
         if (isGameOver && Input.GetKeyDown(KeyCode.R))
         {
             isGameOver = false;
+            Destroy(gameObject);
             SceneManager.LoadScene("FirstSceen");
         }
-        if (playerpos.position.y < -15)
-        {
-            fallDamage();
-        }
     }
-    public void getAttacked()
+    public void SetPlayerStatus(PlayerStatus playerStatus)
     {
-        if (!isGameOver)
-        {
-            if (playerMove.immortal)
-            {
-                return;
-            }
-            if (playerMove.isDash)
-            {
-                return;
-            }
-
-            playerMove.immortal = true;
-            StartCoroutine(ImmotalCorutine());
-            playerStatus.Hp -= 1;
-            playerMove.animator.SetTrigger("doHit");
-            HpSyncronization();
-            statusUI.BasicUIUpdate();
-            statusUI.MainUIUpdate();
-        }
+        this.playerStatus= playerStatus;
     }
     public void DataSynchronization()
     {
         HpSyncronization();
-        UpgradeSyncronization();
         GoldSyncronization();
+        InventorySyncronization();
     }
     public void HpSyncronization()
     {
@@ -101,87 +77,89 @@ public class GameManager : MonoBehaviour
     }
     public void UpgradeSyncronization()
     {
-        if (playerStatus.UpgradCount != 0)
-        {
-            isUpgrade = true;
-        }
-        else
-            isUpgrade = false;
+        isUpgrade = true;
     }
     public void GoldSyncronization()
     {
         playerGold = playerStatus.gold;
     }
-    IEnumerator ImmotalCorutine()
+    public void InventorySyncronization()
     {
-        yield return new WaitForSeconds(1);
-        HpSyncronization();
-        playerMove.immortal=false;
+        for (int i = 0; i < 6; i++)
+        {
+            if(inventoryScript.inventory[i]!=null)
+            {
+                inventory[i] = inventoryScript.inventory[i];
+            }
+            else if (inventoryScript.inventory[i] == null)
+            {
+                inventory[i] = null;
+            }
+        }
     }
-    public void fallDamage()
+    public void PlayerDataSyncronization()
     {
-        playerStatus.Hp -= 1;
-        playerpos.position = new Vector3(-10, -3, -1);
-        HpSyncronization();
-        statusUI.BasicUIUpdate();
-    }
-    public void AddItemtoInventory()
-    {
+        playerStatus.Hp= playerHp;
+        Debug.Log("HP");
+        playerStatus.maxHp= playerMaxHp;
+        Debug.Log("maxHp");
+        playerStatus.gold = playerGold;
+        Debug.Log("gold");
+        if (isUpgrade)
+        {
+            playerStatus.ClassUpgrade();
+
+        }
+        Debug.Log("Upgrade");
         for (int i = 0; i < 6; i++)
         {
             if (inventory[i] == null)
             {
-                inventory[i] = shop.selectedItem;
-                if (inventory[i].itemName == "Beer" || inventory[i].itemName == "Bread" || inventory[i].itemName == "Fish Steak" || inventory[i].itemName == "Monster Meat")
-                {
-                    ApplyEffect(inventory[i]);
-                    inventoryUI.IselectedItem = inventory[i];
-                    inventoryUI.RemoveItem();
-                    return;
-                }
-                inventoryUI.UpdateInventoryUI(inventory[i],i);
-
-                ApplyEffect(inventory[i]);
-                inventoryUI.slotButton[i].onClick.AddListener(() => inventoryUI.SelecteItem(inventory[i]));
-
-                return;
+                continue;
             }
+            inventoryScript.inventory[i] = inventory[i];
+            playerStatus.ApplyEffect(inventory[i]);
+            inventoryUI.UpdateInventoryUI(inventory[i], i);
         }
-        systemMassage.SetActive(true);
-        Setfalse += Time.deltaTime;
-        SystemMassage.text = "인벤토리가 꽉 찼습니다.";
-        if (Setfalse == 2.0)
-        {
-            systemMassage.SetActive(false);
-            Setfalse = 0f;
-        }
+        Debug.Log("inventory");
+        statusUI.BasicUIUpdate();
+        statusUI.MainUIUpdate();
+        Debug.Log("UI");
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    public void ApplyEffect(Item item)
+    private void OnDisable()
     {
-
-        playerStatus.Damage += item.attackBonus;
-        playerStatus.maxHp += item.maxHpBonus;
-        playerStatus.Hp += item.hpHeal;
-        if (playerStatus.Hp > playerStatus.maxHp)
-        {
-            playerStatus.Hp = playerStatus.maxHp;
-        }
-        playerStatus.CritDam += item.critDamBonus;
-        playerStatus.CritPer += item.critperBonus;
-        playerStatus.goldBonus += item.getGoldBonus;
-        playerMove.jumpPower += item.jumpBonus;
-        playerMove.movePower += item.speedBonus;
+        DataSynchronization();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    public void RemoveEffect(Item item)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        playerStatus.Damage -= item.attackBonus;
-        playerStatus.maxHp -= item.maxHpBonus;
-        playerStatus.CritDam -= item.critDamBonus;
-        playerStatus.CritPer -= item.critperBonus;
-        playerStatus.goldBonus -= item.getGoldBonus;
-        playerMove.jumpPower -= item.jumpBonus;
-        playerMove.movePower -= item.speedBonus;
+        player = GameObject.Find("BS");
+        statusUI = GameObject.Find("Canvas").transform.Find("InventoryManager").transform.Find("CharacterStatus").transform.Find("StatusUI").GetComponent<StatusUI>();
+        gameOverUI = GameObject.Find("Canvas").transform.Find("GameOverUI").gameObject;
+        gameOverUI.SetActive(false);
+        inventoryScript = player.GetComponent<Inventory>();
+        inventoryUI = FindAnyObjectByType<InventoryUI>();
+        playerStatus = player.GetComponent<PlayerStatus>();
+        StageNum = GameObject.Find("Canvas").transform.Find("StageUI").transform.Find("StageBaseUI").transform.Find("StageText").GetComponent<Text>();
+        if (scene.name == "Stage1")
+        {
+            DataSynchronization();
+            StageNum.text = "Stage1 : 숲 초입";
+        }
+        else if(scene.name == "Stage2")
+        {
+            StageNum.text = "Stage2 : 죽은 숲";
+        }
+        else if(scene.name == "Stage3")
+        {
+            StageNum.text = "Kill the Boss!";
+        }
+        PlayerDataSyncronization();
     }
 }

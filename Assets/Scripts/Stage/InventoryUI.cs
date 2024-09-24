@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
@@ -25,17 +26,19 @@ public class InventoryUI : MonoBehaviour
     public Text ExItemText; // 아이템의 효과 텍스트
     [SerializeField]
     public Button[] slotButton = new Button[6];
+    public GameManager gameManager;
     [SerializeField]
-    private GameManager gameManager;
+    private PlayerStatus playerStatus;
+    [SerializeField]
+    private Inventory inventory;
     public Item IselectedItem;
 
 
     private bool maintrue;
     private bool itemExTrue;
 
-    private void Start()
+    private void Awake()
     {
-        
         mainInventory.SetActive(false);
         itemExplain.SetActive(false);
 
@@ -77,7 +80,7 @@ public class InventoryUI : MonoBehaviour
     {
         slotButton[i].image.sprite = item.itemImage;
     }
-    public void ClearSlot(int i)
+    public void ClearSlotImage(int i)
     {
         slotButton[i].image.sprite = null;
     }
@@ -99,7 +102,7 @@ public class InventoryUI : MonoBehaviour
         }
         else if (itemImage.sprite != null)
         {
-            ChangeImageAndText(itemImage);   
+            ChangeImageAndText(itemImage);  
             itemExplain.SetActive(true);
             itemExTrue = true;
         }
@@ -110,8 +113,14 @@ public class InventoryUI : MonoBehaviour
         {
             if (gameManager.inventory[i] == IselectedItem)
             {
-                ClearSlot(i);
-                gameManager.RemoveEffect(IselectedItem);
+                ClearSlotImage(i);
+                itemExplain.SetActive(false);
+                itemExTrue = false;
+                playerStatus.RemoveEffect(IselectedItem);
+                inventory.inventory[i] = null;
+                statusUI.BasicUIUpdate();
+                statusUI.MainUIUpdate();
+                gameManager.InventorySyncronization();
                 return;
             }
         }
@@ -125,7 +134,7 @@ public class InventoryUI : MonoBehaviour
             case "Rune Stone":
                 ExItemNameText.text = "룬스톤";
                 ExItemDescriptionText.text = "고대 룬이 새겨진 돌쪼가리";
-                ExItemText.text = "공/마 +10%";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Feather":
                 ExItemNameText.text = "천사의 깃털";
@@ -135,12 +144,12 @@ public class InventoryUI : MonoBehaviour
             case "Monster Eye":
                 ExItemNameText.text = "용의 눈";
                 ExItemDescriptionText.text = "생전 강력했던 몬스터의 눈이다.";
-                ExItemText.text = "공/마+20%";
-                break;
+                ExItemText.text = "공격력 +20";
+                break; ;
             case "Helm":
                 ExItemNameText.text = "기사의 헬름";
                 ExItemDescriptionText.text = "이름모를 기사가 사용했던 헬름이다.";
-                ExItemText.text = "공격력 +10%,최대채력 +2";
+                ExItemText.text = "공격력 +10,최대채력 +2";
                 break;
             case "Iron Armor":
                 ExItemNameText.text = "철갑옷";
@@ -175,12 +184,12 @@ public class InventoryUI : MonoBehaviour
             case "Skull":
                 ExItemNameText.text = "두개골";
                 ExItemDescriptionText.text = "야만인이 된듯한 기분..글로리아!!";
-                ExItemText.text = "공격력+50%,최대채력 -3";
+                ExItemText.text = "공격력 +50,최대채력 -3";
                 break;
             case "Wizard Hat":
                 ExItemNameText.text = "마녀의 모자";
                 ExItemDescriptionText.text = "숲의 마녀가 사용하던 모자";
-                ExItemText.text = "공격력+30%";
+                ExItemText.text = "공격력 +30";
                 break;
             case "Beer":
                 ExItemNameText.text = "맥주";
@@ -230,22 +239,22 @@ public class InventoryUI : MonoBehaviour
             case "Arrow":
                 ExItemNameText.text = "화살";
                 ExItemDescriptionText.text = "그다지 좋은 화살은.. 그래도 기존보다는 좋습니다!";
-                ExItemText.text = "공격력 +10%";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Bow":
                 ExItemNameText.text = "활";
                 ExItemDescriptionText.text = "그다지 좋은 활은… 그래도 기존보다는 좋습니다!\r\n";
-                ExItemText.text = "공격력 +10%";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Emerald Staff":
                 ExItemNameText.text = "에메랄드 스태프";
                 ExItemDescriptionText.text = "에메랄드는 얼마일까요? 마력반응이 빨라집니다!";
-                ExItemText.text = "공격력+15%";
+                ExItemText.text = "공격력+15";
                 break;
             case "Golden Sword":
                 ExItemNameText.text = "화려한 검";
                 ExItemDescriptionText.text = "멋지고 예쁘지만 실용성은 떨어진다. 쓰쓰쓰?";
-                ExItemText.text = "공격력 +5%, 치명타 데미지 +30%";
+                ExItemText.text = "공격력 +5, 치명타 데미지 +30%";
                 break;
             case "Iron Shield":
                 ExItemNameText.text = "강철방패";
@@ -255,7 +264,7 @@ public class InventoryUI : MonoBehaviour
             case "Iron Sword":
                 ExItemNameText.text = "철검";
                 ExItemDescriptionText.text = "평범한 철검. 재미없는 검이다\r\n";
-                ExItemText.text = "공격력 +10%";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Knife":
                 ExItemNameText.text = "암살자의 단검";
@@ -265,17 +274,17 @@ public class InventoryUI : MonoBehaviour
             case "Magic Wand":
                 ExItemNameText.text = "딱총나무 지팡이";
                 ExItemDescriptionText.text = "Avada Kedavra!";
-                ExItemText.text = "마력+50%";
+                ExItemText.text = "공격력 +50";
                 break;
             case "Sapphire Staff":
                 ExItemNameText.text = "사파이어 스태프";
-                ExItemDescriptionText.text = "영롱하네요.. 마법공격력이 상승합니다!";
-                ExItemText.text = "마력 +10%";
+                ExItemDescriptionText.text = "영롱하네요.. 시원한 기분이 듭니다!";
+                ExItemText.text = "공격력 +10";
                 break;
             case "Silver Sword":
                 ExItemNameText.text = "강철검";
                 ExItemDescriptionText.text = "실용적이고 단단한 검.";
-                ExItemText.text = "공격력 +20%";
+                ExItemText.text = "공격력 +20";
                 break;
             case "Wooden Shield":
                 ExItemNameText.text = "나무방패";
@@ -285,13 +294,26 @@ public class InventoryUI : MonoBehaviour
             case "Wooden Staff":
                 ExItemNameText.text = "고목나무 스태프";
                 ExItemDescriptionText.text = "오래된 나무면..안부러지나,,?";
-                ExItemText.text = "마력 +15%";
+                ExItemText.text = "공격력 +15";
                 break;
             case "Wooden Sword":
                 ExItemNameText.text = "나무검";
                 ExItemDescriptionText.text = "꼬꼬마 시절 들고놀던 나무검. 생각보다 단단할지도..?\r\n";
-                ExItemText.text = "공격력 +5%";
+                ExItemText.text = "공격력 +5";
                 break;
         }
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        gameManager = FindAnyObjectByType<GameManager>();
     }
 }

@@ -6,31 +6,45 @@ using UnityEngine.UI;
 
 public class ShopOpen : MonoBehaviour
 {
-
-    public Transform pos;
-    public Vector2 boxSize;
-
     [SerializeField]
-    Shop shop;
+    private Shop shop;
+    public bool canOpen;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (canOpen)
         {
-            Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
-            foreach (Collider2D collider in collider2Ds)
+            if (Input.GetKeyDown(KeyCode.F))
             {
-                if (collider.CompareTag("Shop"))
-                {
-                    Open();
-                }
+                Open();
             }
+        }
+        if (!canOpen)
+        {
+            Close();
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "Player")
+        {
+            canOpen = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.tag == "Player")
+        {
+            canOpen = false;
         }
     }
     public void Open()
     {
         shop.ShopUI.SetActive(true);
         shop.itemPrice.text = "구매하기";
+    }
+    public void Close()
+    {
+        shop.ShopUI.SetActive(false);
     }
 }

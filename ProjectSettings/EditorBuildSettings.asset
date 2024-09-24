@@ -9,15 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/FirstSceen.unity
     guid: dab19fe8f2852e1479d41fc0857462b4
   - enabled: 1
-    path: Assets/Scenes/Lobby.unity
-    guid: ed1476e21ee14f245be0ec90fb8df145
-  - enabled: 1
     path: Assets/Scenes/Stage1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/Stage2.unity
-    guid: ac97c720ce4be014c993e5de0ec810a9
+    guid: 8b2c34f4276b61044b9e17f1d783ee15
   - enabled: 1
-    path: Assets/Scenes/GameOver.unity
-    guid: 017b40edeb02a234cbd65b0062b40172
+    path: Assets/Scenes/Stage3.unity
+    guid: ca5cb5db5b7d1c841b2a46392c6d9f5d
   m_configObjects: {}

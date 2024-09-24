@@ -6,15 +6,16 @@ using UnityEngine.UIElements;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float jumpPower;     //점프력
-    private float scaleX;
 
-    private Vector2 StartPoint;
+    public Vector2 StartPoint;
+    private Transform playerPos;
     [SerializeField]
     private int jumpCount;
+    private PlayerStatus playerStatus;
 
     public LayerMask Mask;
-    public float movePower;     //이속
+    public LayerMask mobMask;
+
     //대쉬
     protected float dashForce = 20f;
     protected float dashDuration = 0.1f;
@@ -24,28 +25,48 @@ public class PlayerMove : MonoBehaviour
     private float lastDashTime;
 
     protected Rigidbody2D rb;
-    public Animator animator;
-    protected Collider2D Playercollider2D;
+    public Animator nowAnimator;
+    public RuntimeAnimatorController UpgradeAnimator;
+    public Collider2D Playercollider2D;
     SpriteRenderer render;
 
     [SerializeField]
-    ParticleSystem moveEffect;
+    private GameObject RmoveEffect;
     [SerializeField]
-    private GameManager gameManager;
+    private GameObject LmoveEffect;
+    public GameManager gameManager;
+    private EnemyHp enemyHp;
+
+    private float curTime;
+    public float coolTime = 0.5f;
+    public float RayLength;
+    private RaycastHit2D[] rayHit;
+    private Vector2 attackStartPoint;
 
     public bool immortal=false;
 
-    protected void Awake()
+    private void Awake()
     {
-        render = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        Playercollider2D = GetComponent<Collider2D>();
+        RmoveEffect.SetActive(false); 
+        LmoveEffect.SetActive(false);
+        jumpCount = 0;
     }
     private void Start()
     {
-        jumpPower = 5f;
-        jumpCount = 0;
+        playerPos = GetComponent<Transform>();
+        render = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
+        nowAnimator = GetComponent<Animator>();
+        Playercollider2D = GetComponent<Collider2D>();
+        playerStatus = GetComponent<PlayerStatus>();
+    }
+    private void OnEnable()
+    {
+        gameManager = FindAnyObjectByType<GameManager>();
+    }
+    public void ChangeAnimation()
+    {
+        nowAnimator.runtimeAnimatorController = UpgradeAnimator;
     }
     private void Update()
     {
@@ -68,15 +89,67 @@ public class PlayerMove : MonoBehaviour
             }
             //이동
             Move();
-
-            scaleX = transform.localScale.x;
-
+            if (playerStatus.isDamaged)
+            {
+                playDamagedAnim();
+            }
             GroundCheck();
 
             if (Input.GetButtonDown("JumpC"))
             {
                 JumpAction();
             }
+            CheckAttackRange();
+            if (curTime <= 0)
+            {
+                if (Input.GetKeyDown(KeyCode.X))
+                {
+                    Attack();
+                    curTime = coolTime;
+                }
+            }
+            else
+            {
+                curTime -= Time.deltaTime;
+            }
+        }
+        if (gameManager.isGameOver||gameManager.isVictory)
+        {
+            rb.velocity = new Vector2(0, 0);
+            RmoveEffect.SetActive(false);
+            LmoveEffect.SetActive(false);
+        }
+    }
+    private void playDamagedAnim()
+    {
+        nowAnimator.SetTrigger("doHit");
+    }
+    private void Attack()
+    {
+        nowAnimator.SetTrigger("doAttack");
+        for (int i = 0; i < rayHit.Length; i++) {
+            enemyHp = rayHit[i].collider.GetComponent<EnemyHp>();
+            if (!enemyHp.isDead)
+            {
+                enemyHp.mobDamaged();
+            } 
+        }
+    }
+    private void CheckAttackRange()
+    {
+        if (!render.flipX)
+        {
+            attackStartPoint = new Vector2(playerPos.position.x,playerPos.position.y+0.5f);
+            rayHit = Physics2D.RaycastAll(attackStartPoint, Vector2.right, RayLength,mobMask);
+            
+            Debug.DrawRay(attackStartPoint, Vector3.right * RayLength, Color.blue);
+
+        }
+        else if (render.flipX)
+        {
+            attackStartPoint = new Vector2(playerPos.position.x, playerPos.position.y + 0.5f);
+            rayHit = Physics2D.RaycastAll(attackStartPoint, Vector2.left, RayLength,mobMask);
+            Debug.DrawRay(attackStartPoint, Vector3.left * RayLength, Color.blue);
         }
     }
     public void StartDash()
@@ -85,7 +158,7 @@ public class PlayerMove : MonoBehaviour
         dashTimeLeft = dashDuration;
         lastDashTime = Time.time;
 
-        animator.SetTrigger("doAttack");//공격모션으로 재생
+        nowAnimator.SetTrigger("doAttack");//공격모션으로 재생
         if (render.flipX)
         {
             rb.velocity = new Vector2((-1) * dashForce, 0f);
@@ -104,68 +177,65 @@ public class PlayerMove : MonoBehaviour
     }
     private void Move()
     {
-        float movedir = 0;
 
-        if (Input.GetAxisRaw("Horizontal") < 0)
-        {
-            animator.SetTrigger("doMove");
-            movedir = -1;
-            render.flipX = true;//transform.localScale = leftV;
-            if (!moveEffect.isPlaying)
-            {
-                moveEffect.Play();
-            }
-        }
-        else if (Input.GetAxisRaw("Horizontal") > 0)
-        {
-            animator.SetTrigger("doMove");
-            movedir = 1;
-            render.flipX = false;//transform.localScale = rightV;
-            if (!moveEffect.isPlaying)
-            {
-                moveEffect.Play();
-            }
-        }
-        else if (Input.GetButtonUp("Horizontal"))
-        {
-            animator.SetTrigger("doStop");
-            if (moveEffect.isPlaying)
-            {
-                moveEffect.Stop();
-            }
-        }
         if (!isDash)
         {
-            rb.velocity = new Vector2(movedir * movePower, rb.velocity.y);
+            float movedir = 0;
+
+            if (Input.GetAxisRaw("Horizontal") < 0)
+            {
+                nowAnimator.SetTrigger("doMove");
+                movedir = -1;
+                render.flipX = true;
+                RmoveEffect.SetActive(false);
+                LmoveEffect.SetActive(true);
+            }
+            else if (Input.GetAxisRaw("Horizontal") > 0)
+            {
+                nowAnimator.SetTrigger("doMove");
+                movedir = 1;
+                render.flipX = false;
+                RmoveEffect.SetActive(true);
+                LmoveEffect.SetActive(false);
+            }
+            else if (Input.GetButtonUp("Horizontal"))
+            {
+                nowAnimator.SetTrigger("doStop");
+                RmoveEffect.SetActive(false);
+                LmoveEffect.SetActive(false);
+            }
+            if (!isDash)
+            {
+                rb.velocity = new Vector2(movedir * playerStatus.movePower, rb.velocity.y);
+            }
         }
-        //this.transform.position += movedir * movePower * Time.deltaTime;
     }
     private void JumpAction()
     {
         if (jumpCount == 0)
         {//1단점프
-            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            rb.velocity = new Vector2(rb.velocity.x, playerStatus.jumpPower);
             jumpCount = 1;
         }
         if (jumpCount == 1)
         {//2단점프
-            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            rb.velocity = new Vector2(rb.velocity.x, playerStatus.jumpPower);
             jumpCount = 2;
         }
     }
     private void GroundCheck()
     {
         float RayLength = 0.3f;
-        if (scaleX == -1)//왼쪽을 보는중
+        if (render.flipX)//왼쪽을 보는중
         {
             StartPoint = new Vector2(Playercollider2D.bounds.center.x + Playercollider2D.bounds.extents.x, Playercollider2D.bounds.min.y);
         }
 
-        else if (scaleX == 1)
+        else if (!render.flipX)
         {
             StartPoint = new Vector2(Playercollider2D.bounds.center.x - Playercollider2D.bounds.extents.x, Playercollider2D.bounds.min.y);
         }
-        Debug.DrawRay(StartPoint, Vector2.down * RayLength, Color.red); // 디버그 레이
+        Debug.DrawRay(StartPoint, Vector2.down * RayLength, Color.red);
         RaycastHit2D hit = Physics2D.Raycast(StartPoint, Vector2.down, RayLength, Mask);
 
         if (hit.collider != null)

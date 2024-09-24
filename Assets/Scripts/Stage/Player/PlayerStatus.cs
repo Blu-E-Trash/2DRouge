@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerStatus : MonoBehaviour
@@ -17,75 +18,127 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField]
     private Text ExText;
     [SerializeField]
-    private GameManager gm;
+    private Text upgradeText;
     public Sprite UpgradedClass; //업글 후의 초상화
+    public Sprite PlayingUpgraded;
+    public bool isDamaged;
     
     public int UpgradCount;
-
+    public float jumpPower;     //점프력
     public float Damage;       //공격력
     public int maxHp;           //최대채력
     public int Hp;           //체력
     public int CritPer;       //크확
-    public int CritDam;       //크뎀 
+    public float CritDam;       //크뎀 
     public float goldBonus;     //골획
     public int gold;        
     
-    private PlayerMove playerMove;
+    public PlayerMove playerMove;
+    public GameManager gameManager;
+    [SerializeField]
+    private StatusUI statusUI;
+    [SerializeField]
+    private Transform playerpos;
+    public float movePower;     //이속
 
-    public void Start()
+    public void Awake()
     {
-        playerMove = GetComponent<PlayerMove>();
         SystemMassageGO.SetActive(false);
-
         Damage = 100;
-        playerMove.movePower = 5;
         CritPer = 20;
-        CritDam = 150;
+        CritDam = 1.5f;
         goldBonus = 1f;
-        if (gm.playerMaxHp == 0)
-            maxHp = 6;
-        else
-            maxHp = gm.playerMaxHp;
-        
-        if (gm.playerGold == 0)
-            gold = 100;
-        else
-            gold = gm.playerGold;
-
-        if (!gm.isUpgrade)
-            UpgradCount = 0;
-        else
-            UpgradCount = 1;
-
-        if (gm.playerHp == 0)
-            Hp = maxHp;
-        else
-            Hp = gm.playerHp;
+        movePower = 5f;
+        jumpPower = 5f;
     }
     private void Update()
     {
         if (Hp <= 0)
         {
-            playerMove.animator.SetTrigger("doDie");
-            gm.isGameOver = true;
+            playerMove.nowAnimator.SetTrigger("doDie");
+            gameManager.isGameOver = true;
+        }
+        if (playerpos.position.y < -15)
+        {
+            fallDamage();
         }
     }
+    public void fallDamage()
+    {
+        Hp -= 1;
+        playerpos.position = new Vector3(-10, -3, -1);
+        gameManager.HpSyncronization();
+        statusUI.BasicUIUpdate();
+    }
+    public void getAttacked()
+    {
+        if (!gameManager.isGameOver)
+        {
+            if (playerMove.immortal)
+            {
+                return;
+            }
+            if (playerMove.isDash)
+            {
+                return;
+            }
+            isDamaged = true;
+            playerMove.immortal = true;
+            StartCoroutine(ImmotalCorutine());
+            Hp -= 1;
+            playerMove.nowAnimator.SetTrigger("doHit");
+            gameManager.HpSyncronization();
+            statusUI.BasicUIUpdate();
+            statusUI.MainUIUpdate();
+            isDamaged = false;
+        }
+    }
+    IEnumerator ImmotalCorutine()
+    {
+        yield return new WaitForSeconds(1);
+        gameManager.HpSyncronization();
+        playerMove.immortal = false;
+    }
+    public void ApplyEffect(Item item)
+    {
+        Damage += item.attackBonus;
+        maxHp += item.maxHpBonus;
+        Hp += item.maxHpBonus;
 
+        Hp += item.hpHeal;
+        if (Hp > maxHp)
+        {
+            Hp = maxHp;
+        }
+        CritDam += item.critDamBonus;
+        CritPer += item.critperBonus;
+        goldBonus += item.getGoldBonus;
+        jumpPower += item.jumpBonus;
+        movePower += item.speedBonus;
+    }
+
+    public void RemoveEffect(Item item)
+    {
+        Damage -= item.attackBonus;
+        maxHp -= item.maxHpBonus;
+        if (Hp >= maxHp)
+        {
+            Hp = maxHp;
+        }
+        CritDam -= item.critDamBonus;
+        CritPer -= item.critperBonus;
+        goldBonus -= item.getGoldBonus;
+        jumpPower -= item.jumpBonus;
+        movePower -= item.speedBonus;
+    }
     public void UpgradeClass()
     {
-        if (UpgradCount<1 && gold >= 1000)
+        if (UpgradCount < 1 && gold >= 500)
         {
-            gold -= 1000;
-            UpgradCount += 1;
-            characterImage.sprite = UpgradedClass;
-            UIcharacterImage.sprite = UpgradedClass;
-            Damage = Damage + 20;
-            maxHp += 2;
-            Hp += 2;
-            CritDam += 30;
-            CritPer += 20;
-            playerMove.dashCooldown -= 1;
-            ExText.text = "정식";
+            gold -= 500;
+            ClassUpgrade();
+            gameManager.GoldSyncronization();
+            gameManager.UpgradeSyncronization();
         }
         else if (UpgradCount != 0)
         {
@@ -93,17 +146,47 @@ public class PlayerStatus : MonoBehaviour
             systemMassage.text = "이미 승급했습니다.";
             Invoke("Out", 2f);
         }
-        else if (gold < 1000)
+        else if (gold < 500)
         {
             SystemMassageGO.SetActive(true);
             systemMassage.text = "돈이 부족합니다.";
             Invoke("Out", 2f);
-
         }
+    }
+    public void ClassUpgrade()
+    {
+        UpgradCount += 1;
+        Damage = Damage + 20;
+        maxHp += 2;
+        Hp += 2;
+        CritDam += 0.3f;
+        CritPer += 20;
+        playerMove.dashCooldown -= 1;
+        characterImage.sprite = UpgradedClass;
+        UIcharacterImage.sprite = UpgradedClass;
+        playerMove.ChangeAnimation();
+        statusUI.BasicUIUpdate();
+        statusUI.MainUIUpdate();
+        ExText.text = "정식 기사";
+        upgradeText.text = "Upgraded";
     }
     private void Out()
     {
         SystemMassageGO.SetActive(false);
+    }
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        playerMove = GetComponent<PlayerMove>();
+        gameManager = FindAnyObjectByType<GameManager>();
     }
 }
 

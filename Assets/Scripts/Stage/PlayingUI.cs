@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class PlayingUI : MonoBehaviour
 {
-    private int MobCount;
-
     [SerializeField]
     private Sprite changeImage;
     Sprite currentImage;
 
-    private void Start()
+    private void Awake()
     {
         currentImage = GetComponent<Sprite>();
     }

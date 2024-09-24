@@ -9,10 +9,15 @@ public class ShopButton : MonoBehaviour
     private Shop shop;
 
     [SerializeField]
-    private Image sellItemImage;
+    public Image sellItemImage;
     
     public void ChangeImage(Item item)
     {
+        if(item == null)
+        {
+            sellItemImage.sprite = null;
+            return;
+        }
         sellItemImage.sprite = item.itemImage;
     }
 }

@@ -13,10 +13,6 @@ public class StartUI : MonoBehaviour
     [SerializeField]
     private GameObject startUI;
     [SerializeField]
-    private GameObject Save;
-    [SerializeField]
-    private GameObject Load;
-    [SerializeField]
     private GameObject Quit;
 
 
@@ -24,6 +20,7 @@ public class StartUI : MonoBehaviour
 
     private void Start()
     {
+        gameObject.SetActive(true);
         TutorialUI.SetActive(false);
         tutorialOPen = false;
     }
@@ -36,8 +33,6 @@ public class StartUI : MonoBehaviour
                 TutorialUI.SetActive(false);
                 startUI.SetActive(true);
                 Tutorial.SetActive(true);
-                Save.SetActive(true);
-                Load.SetActive(true);
                 Quit.SetActive(true);
                 tutorialOPen = false;
             }
@@ -61,8 +56,6 @@ public class StartUI : MonoBehaviour
     {
         TutorialUI.SetActive(true);
         startUI.SetActive(false);
-        Save.SetActive(false);
-        Load.SetActive(false);
         Quit.SetActive(false);
         Tutorial.SetActive(false);
 
