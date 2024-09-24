@@ -30,7 +30,7 @@ public class StatusUI : MonoBehaviour
     {
         mainHpText.text = "Hp:" + playerStatus.maxHp.ToString() + "/" + playerStatus.Hp.ToString();
         mainmovePowerText.text = "이동속도:" + playerStatus.movePower.ToString();
-        mainCritDamText.text = "치명타 데미지:" + playerStatus.CritDam.ToString() + "%";
+        mainCritDamText.text = "치명타 데미지:" + (playerStatus.CritDam*100).ToString() + "%";
         mainCritPerText.text = "치명타 확률:" + playerStatus.CritPer.ToString() + "%";
         mainDamageText.text = "공격력:" + playerStatus.Damage.ToString();
         basicHpText.text = "Hp:" + playerStatus.Hp.ToString();
@@ -46,7 +46,7 @@ public class StatusUI : MonoBehaviour
         mainDamageText.text = "공격력:" + playerStatus.Damage.ToString();
         mainHpText.text = "Hp:" + playerStatus.maxHp.ToString() + "/" + playerStatus.Hp.ToString();
         mainmovePowerText.text = "이동속도:" + playerStatus.movePower.ToString();
-        mainCritDamText.text = "치명타 데미지:" + playerStatus.CritDam.ToString() + "%";
+        mainCritDamText.text = "치명타 데미지:" + (playerStatus.CritDam * 100).ToString() + "%";
         mainCritPerText.text = "치명타 확률:" + playerStatus.CritPer.ToString() + "%";
     }
 }
