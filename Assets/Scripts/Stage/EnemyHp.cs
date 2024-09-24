@@ -44,12 +44,10 @@ public class EnemyHp : MonoBehaviour
         if (this.transform.localScale.x == -1)
         {
             critEffect.transform.localScale = new Vector3(-1, 1, 1);
-            critEffect.transform.localPosition = new Vector3(0.55f, 0.67f, 0); 
         }
         else if(this.transform.localScale.x == 1)
         {
             critEffect.transform.localScale = new Vector3(1, 1, 1);
-            critEffect.transform.localPosition = new Vector3(-0.4f, 0.7f, 0);
         }
     }
     private void CriticalDamaged()
@@ -63,6 +61,7 @@ public class EnemyHp : MonoBehaviour
         if (CritrcalPer <= playerStatus.CritPer)
         {
             CriticalDamaged();
+            Invoke("TurnOffEffect", 1f);
         }
         else
         {
@@ -83,6 +82,10 @@ public class EnemyHp : MonoBehaviour
             
             isDead = true;
         }
+    }
+    private void TurnOffEffect()
+    {
+        critEffect.SetActive(false);
     }
     private void HowManyGold()
     {
