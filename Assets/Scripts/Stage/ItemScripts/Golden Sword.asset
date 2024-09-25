@@ -16,13 +16,11 @@ MonoBehaviour:
   itemImage: {fileID: 21300000, guid: 90e99a7fde056a4418b9fe16084adb5c, type: 3}
   attackBonus: 5
   maxHpBonus: 0
+  startMaxHpBonus: 0
   hpHeal: 0
   speedBonus: 0
   jumpBonus: 0
-  critDamBonus: 30
+  critDamBonus: 0.3
   critperBonus: 0
-  goldBonus: 0
   getGoldBonus: 0
   itemPrice: 200
-  sellPrice: 100
-  inInventory: 0
