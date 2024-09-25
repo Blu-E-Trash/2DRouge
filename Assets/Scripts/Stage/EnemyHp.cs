@@ -24,6 +24,7 @@ public class EnemyHp : MonoBehaviour
     private Animator animator;
     private PlayerStatus playerStatus;
     private EnemyMove enemyMove;
+    public bool isBossDead;
 
     public float MaxHP => maxHP;
     public float CurrentHP => currentHP;
@@ -74,6 +75,7 @@ public class EnemyHp : MonoBehaviour
         }
         else if (currentHP <= 0)
         {
+            animator.SetTrigger("Hit");
             animator.SetBool("Dead", true);
             HowManyGold();
             playerStatus.gold += Mathf.FloorToInt(playerStatus.goldBonus*HMGold);
@@ -81,6 +83,10 @@ public class EnemyHp : MonoBehaviour
             statusUI.BasicUIUpdate();
             
             isDead = true;
+            if(this.tag == "Boss")
+            {
+                isBossDead = true;
+            }
         }
     }
     private void TurnOffEffect()

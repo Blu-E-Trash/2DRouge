@@ -568,6 +568,10 @@ PrefabInstance:
       propertyPath: playerStatus
       value: 
       objectReference: {fileID: 1874493415}
+    - target: {fileID: 7052069480446449886, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8081137273256086230, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
       propertyPath: m_Name
       value: Zombie
@@ -2755,6 +2759,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7052069480446449886, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8081137273256086230, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
       propertyPath: m_Name
       value: Zombie (4)
@@ -3631,7 +3639,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &636578723
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4099,6 +4107,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5320945436527311433, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5448274424371696111, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
       propertyPath: m_Name
       value: Ghoul (1)
@@ -4171,6 +4183,10 @@ PrefabInstance:
       propertyPath: critEffect
       value: 
       objectReference: {fileID: 674255639}
+    - target: {fileID: 8947336867365023546, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5672,6 +5688,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6379947816608453927, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
       propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7052069480446449886, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
+      propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8081137273256086230, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
@@ -8724,6 +8744,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7052069480446449886, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8081137273256086230, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
       propertyPath: m_Name
       value: Zombie (5)
@@ -8810,6 +8834,10 @@ PrefabInstance:
       propertyPath: playerStatus
       value: 
       objectReference: {fileID: 1874493415}
+    - target: {fileID: 7052069480446449886, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8081137273256086230, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
       propertyPath: m_Name
       value: Zombie (1)
@@ -8916,6 +8944,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6379947816608453927, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
       propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7052069480446449886, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
+      propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8081137273256086230, guid: 9055da99dfca6794c8c992ff7a883be7, type: 3}
@@ -9247,8 +9279,16 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1026711235679377224, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3402406760918555023, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
       propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5320945436527311433, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
+      propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5448274424371696111, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
@@ -9323,6 +9363,10 @@ PrefabInstance:
       propertyPath: critEffect
       value: 
       objectReference: {fileID: 1632227571}
+    - target: {fileID: 8947336867365023546, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9595,6 +9639,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3402406760918555023, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
       propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5320945436527311433, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
+      propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5448274424371696111, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
@@ -14096,6 +14144,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5320945436527311433, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5448274424371696111, guid: 39c460db9d69a7e4da316adb63028c98, type: 3}
       propertyPath: m_Name
       value: Ghoul

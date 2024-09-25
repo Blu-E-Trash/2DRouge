@@ -982,6 +982,10 @@ PrefabInstance:
       propertyPath: playerStatus
       value: 
       objectReference: {fileID: 1874493415}
+    - target: {fileID: 2497704704875896990, guid: 5299fe7468157a44383366a4b25d0d5f, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2517332401086692661, guid: 5299fe7468157a44383366a4b25d0d5f, type: 3}
       propertyPath: statusUI
       value: 
@@ -5426,6 +5430,10 @@ PrefabInstance:
       propertyPath: playerStatus
       value: 
       objectReference: {fileID: 1874493415}
+    - target: {fileID: 2497704704875896990, guid: 5299fe7468157a44383366a4b25d0d5f, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2517332401086692661, guid: 5299fe7468157a44383366a4b25d0d5f, type: 3}
       propertyPath: statusUI
       value: 
@@ -6074,6 +6082,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: General Skeleton (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4593340344151542302, guid: 8066161b630efd84d93050f03549e49a, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5664536690294260875, guid: 8066161b630efd84d93050f03549e49a, type: 3}
       propertyPath: statusUI
       value: 
@@ -6304,6 +6316,10 @@ PrefabInstance:
     - target: {fileID: 4050564403706240798, guid: 8066161b630efd84d93050f03549e49a, type: 3}
       propertyPath: m_TagString
       value: General Skeleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4593340344151542302, guid: 8066161b630efd84d93050f03549e49a, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4971350520925292092, guid: 8066161b630efd84d93050f03549e49a, type: 3}
       propertyPath: m_IsTrigger
@@ -7719,6 +7735,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: General Skeleton
       objectReference: {fileID: 0}
+    - target: {fileID: 4593340344151542302, guid: 8066161b630efd84d93050f03549e49a, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4971350520925292092, guid: 8066161b630efd84d93050f03549e49a, type: 3}
       propertyPath: m_IsTrigger
       value: 1
@@ -8226,6 +8246,10 @@ PrefabInstance:
     - target: {fileID: 2130558827406439632, guid: 5299fe7468157a44383366a4b25d0d5f, type: 3}
       propertyPath: groundMask.m_Bits
       value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 2497704704875896990, guid: 5299fe7468157a44383366a4b25d0d5f, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2517332401086692661, guid: 5299fe7468157a44383366a4b25d0d5f, type: 3}
       propertyPath: statusUI
@@ -10599,6 +10623,10 @@ PrefabInstance:
       propertyPath: groundMask.m_Bits
       value: 256
       objectReference: {fileID: 0}
+    - target: {fileID: 2497704704875896990, guid: 5299fe7468157a44383366a4b25d0d5f, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2517332401086692661, guid: 5299fe7468157a44383366a4b25d0d5f, type: 3}
       propertyPath: statusUI
       value: 
@@ -12193,6 +12221,10 @@ PrefabInstance:
     - target: {fileID: 4050564403706240798, guid: 8066161b630efd84d93050f03549e49a, type: 3}
       propertyPath: m_Name
       value: General Skeleton
+      objectReference: {fileID: 0}
+    - target: {fileID: 4593340344151542302, guid: 8066161b630efd84d93050f03549e49a, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5664536690294260875, guid: 8066161b630efd84d93050f03549e49a, type: 3}
       propertyPath: statusUI
