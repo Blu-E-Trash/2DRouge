@@ -694,7 +694,7 @@ MonoBehaviour:
   isVictory: 0
   isUpgrade: 0
   playerGold: 0
-  playerMaxHp: 0
+  playerStartMaxHp: 0
   playerHp: 0
   inventory:
   - {fileID: 0}
@@ -1835,10 +1835,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 163657718}
     - target: {fileID: 3005361078576666007, guid: 85a2c0dc3ff09a443b97d17ca2717fd8, type: 3}
-      propertyPath: playerMove
-      value: 
-      objectReference: {fileID: 1729394840}
-    - target: {fileID: 3005361078576666007, guid: 85a2c0dc3ff09a443b97d17ca2717fd8, type: 3}
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 132733730}
@@ -1862,22 +1858,6 @@ PrefabInstance:
       propertyPath: UIcharacterImage
       value: 
       objectReference: {fileID: 1446695076}
-    - target: {fileID: 3907511621582250337, guid: 85a2c0dc3ff09a443b97d17ca2717fd8, type: 3}
-      propertyPath: shop
-      value: 
-      objectReference: {fileID: 1630069891}
-    - target: {fileID: 3907511621582250337, guid: 85a2c0dc3ff09a443b97d17ca2717fd8, type: 3}
-      propertyPath: inventoryUI
-      value: 
-      objectReference: {fileID: 307031608}
-    - target: {fileID: 3907511621582250337, guid: 85a2c0dc3ff09a443b97d17ca2717fd8, type: 3}
-      propertyPath: SystemMassage
-      value: 
-      objectReference: {fileID: 548082778}
-    - target: {fileID: 3907511621582250337, guid: 85a2c0dc3ff09a443b97d17ca2717fd8, type: 3}
-      propertyPath: systemMassage
-      value: 
-      objectReference: {fileID: 926279995}
     - target: {fileID: 4294203957125512626, guid: 85a2c0dc3ff09a443b97d17ca2717fd8, type: 3}
       propertyPath: m_Name
       value: BS
@@ -2140,6 +2120,7 @@ MonoBehaviour:
   playerStatus: {fileID: 1874493415}
   inventory: {fileID: 280302590}
   IselectedItem: {fileID: 0}
+  maintrue: 0
 --- !u!1001 &320506031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9911,6 +9892,7 @@ MonoBehaviour:
   - {fileID: 2024939003}
   - {fileID: 1878458925}
   playerStatus: {fileID: 1874493415}
+  inventoryUI: {fileID: 307031608}
   shopOpen: {fileID: 761865159608413508}
   statusUI: {fileID: 163657718}
   selectedItem: {fileID: 0}
@@ -10817,9 +10799,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1383392492}
+  - {fileID: 1630069888}
   - {fileID: 307031607}
   - {fileID: 235472034}
-  - {fileID: 1630069888}
   - {fileID: 926279996}
   - {fileID: 6171053}
   - {fileID: 636578723}

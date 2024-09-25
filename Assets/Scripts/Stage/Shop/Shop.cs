@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,9 +38,11 @@ public class Shop : MonoBehaviour
     private Button[] buttons;
 
     [SerializeField]
-    PlayerStatus playerStatus;
+    private PlayerStatus playerStatus;
     [SerializeField]
-    ShopOpen shopOpen;
+    private InventoryUI inventoryUI;
+    [SerializeField]
+    private ShopOpen shopOpen;
     [SerializeField]
     private StatusUI statusUI;
     public Item selectedItem;         // 플레이어가 선택한 아이템
@@ -56,17 +60,20 @@ public class Shop : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (!inventoryUI.maintrue)
         {
-            if (!itemExTrue)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                ShopUI.SetActive(false);
-                shopOpen.isOpening = false;
-            }
-            else if(itemExTrue)
-            {
-                SellingItemExplain.SetActive(false);
-                itemExTrue = false;
+                if (!itemExTrue)
+                {
+                    ShopUI.SetActive(false);
+                    shopOpen.isOpening = false;
+                }
+                else if (itemExTrue)
+                {
+                    SellingItemExplain.SetActive(false);
+                    itemExTrue = false;
+                }
             }
         }
     }
@@ -101,6 +108,11 @@ public class Shop : MonoBehaviour
         gameManager = FindAnyObjectByType<GameManager>();
         if (playerStatus.gold >= selectedItem.itemPrice)
         {
+            if (inventory.inventoryCount >= 6)
+            {
+                inventory.InventoryIsFull();
+                return;
+            }
             if (selectedItem.itemName == "Beer" || selectedItem.itemName == "Bread" || selectedItem.itemName == "Fish Steak" || selectedItem.itemName == "Monster Meat")
             {
                 playerStatus.ApplyEffect(selectedItem);

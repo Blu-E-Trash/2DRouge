@@ -39,7 +39,7 @@ public class StatusUI : MonoBehaviour
     public void BasicUIUpdate()
     {
         basicCoinText.text = "$:" + playerStatus.gold.ToString();
-        basicHpText.text = "Hp" + playerStatus.Hp.ToString();
+        basicHpText.text = "Hp:" + playerStatus.Hp.ToString();
     }
     public void MainUIUpdate()
     {

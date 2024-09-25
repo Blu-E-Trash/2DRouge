@@ -10,6 +10,7 @@ public class Item : ScriptableObject
 
     public int attackBonus;
     public int maxHpBonus;
+    public int startMaxHpBonus;
     public int hpHeal;
     public int speedBonus;
     public int jumpBonus;

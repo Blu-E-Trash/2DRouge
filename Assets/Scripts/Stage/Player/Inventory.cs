@@ -16,6 +16,7 @@ public class Inventory : MonoBehaviour
     private Text SystemMassage;
     [SerializeField]
     private GameObject systemMassage;
+    public int inventoryCount = 0;
 
     public GameManager gameManager;
     private PlayerStatus playerStatus;
@@ -34,12 +35,17 @@ public class Inventory : MonoBehaviour
                 inventoryUI.UpdateInventoryUI(inventory[i], i);
                 inventoryUI.slotButton[i].onClick.AddListener(() => inventoryUI.SelecteItem(inventory[i]));
                 playerStatus.ApplyEffect(inventory[i]);
+                inventoryCount++;
+                gameManager.currentHpSyncronization();
                 gameManager.InventorySyncronization();
                 return;
             }
         }
+    }
+    public void InventoryIsFull()
+    {
         systemMassage.SetActive(true);
-        Invoke("TurnOffMassage",1f);
+        Invoke("TurnOffMassage", 1f);
         SystemMassage.text = "¿Œ∫•≈‰∏Æ∞° ≤À √°Ω¿¥œ¥Ÿ.";
     }
     private void TurnOffMassage()

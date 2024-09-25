@@ -34,7 +34,7 @@ public class InventoryUI : MonoBehaviour
     public Item IselectedItem;
 
 
-    private bool maintrue;
+    public bool maintrue;
     private bool itemExTrue;
 
     private void Awake()
@@ -72,7 +72,7 @@ public class InventoryUI : MonoBehaviour
             else if (!itemExTrue)
             {
                 mainInventory.SetActive(false);
-                itemExTrue = false;
+                maintrue = false;
             }
         }
     }
@@ -117,6 +117,7 @@ public class InventoryUI : MonoBehaviour
                 itemExplain.SetActive(false);
                 itemExTrue = false;
                 playerStatus.RemoveEffect(IselectedItem);
+                inventory.inventoryCount -= 1;
                 inventory.inventory[i] = null;
                 statusUI.BasicUIUpdate();
                 statusUI.MainUIUpdate();

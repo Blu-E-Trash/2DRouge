@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     //저장될 데이터
     public bool isUpgrade;      //승급
     public int playerGold;      //골드
-    public int playerMaxHp;     //최대채력
+    public int playerStartMaxHp;     //최대채력
     public int playerHp;        //채력
     public Item[] inventory = new Item[6];     //인벤은 바뀔수도 있음;
 
@@ -73,7 +73,11 @@ public class GameManager : MonoBehaviour
     public void HpSyncronization()
     {
         playerHp = playerStatus.Hp;
-        playerMaxHp = playerStatus.maxHp;
+        playerStartMaxHp = playerStatus.startMaxHp;
+    }
+    public void currentHpSyncronization()
+    {
+        playerHp = playerStatus.Hp;
     }
     public void UpgradeSyncronization()
     {
@@ -99,18 +103,10 @@ public class GameManager : MonoBehaviour
     }
     public void PlayerDataSyncronization()
     {
-        playerStatus.Hp= playerHp;
-        Debug.Log("HP");
-        playerStatus.maxHp= playerMaxHp;
+        playerStatus.startMaxHp = playerStartMaxHp;
+        playerStatus.maxHp = playerStartMaxHp;
         Debug.Log("maxHp");
-        playerStatus.gold = playerGold;
-        Debug.Log("gold");
-        if (isUpgrade)
-        {
-            playerStatus.ClassUpgrade();
 
-        }
-        Debug.Log("Upgrade");
         for (int i = 0; i < 6; i++)
         {
             if (inventory[i] == null)
@@ -119,9 +115,20 @@ public class GameManager : MonoBehaviour
             }
             inventoryScript.inventory[i] = inventory[i];
             playerStatus.ApplyEffect(inventory[i]);
+            inventoryScript.inventoryCount++;
             inventoryUI.UpdateInventoryUI(inventory[i], i);
         }
         Debug.Log("inventory");
+        
+        playerStatus.gold = playerGold;
+        Debug.Log("gold");
+        if (isUpgrade)
+        {
+            playerStatus.ClassUpgrade();
+        }
+        Debug.Log("Upgrade");
+        playerStatus.Hp = playerHp;
+        Debug.Log("HP");
         statusUI.BasicUIUpdate();
         statusUI.MainUIUpdate();
         Debug.Log("UI");
@@ -155,11 +162,12 @@ public class GameManager : MonoBehaviour
         else if(scene.name == "Stage2")
         {
             StageNum.text = "Stage2 : 죽은 숲";
+            PlayerDataSyncronization();
         }
         else if(scene.name == "Stage3")
         {
             StageNum.text = "Kill the Boss!";
+            PlayerDataSyncronization();
         }
-        PlayerDataSyncronization();
     }
 }

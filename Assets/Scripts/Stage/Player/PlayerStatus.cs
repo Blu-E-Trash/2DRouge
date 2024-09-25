@@ -24,6 +24,7 @@ public class PlayerStatus : MonoBehaviour
     public bool isDamaged;
     
     public int UpgradCount;
+    public int startMaxHp;
     public float jumpPower;     //점프력
     public float Damage;       //공격력
     public int maxHp;           //최대체력
@@ -44,6 +45,8 @@ public class PlayerStatus : MonoBehaviour
     public void Awake()
     {
         SystemMassageGO.SetActive(false);
+        startMaxHp = 6;
+        maxHp = startMaxHp;
         Damage = 100;
         CritPer = 20;
         CritDam = 1.5f;
@@ -67,7 +70,7 @@ public class PlayerStatus : MonoBehaviour
     {
         Hp -= 1;
         playerpos.position = new Vector3(-10, -3, -1);
-        gameManager.HpSyncronization();
+        gameManager.currentHpSyncronization();
         statusUI.BasicUIUpdate();
     }
     public void getAttacked()
@@ -87,7 +90,7 @@ public class PlayerStatus : MonoBehaviour
             StartCoroutine(ImmotalCorutine());
             Hp -= 1;
             playerMove.nowAnimator.SetTrigger("doHit");
-            gameManager.HpSyncronization();
+            gameManager.currentHpSyncronization();
             statusUI.BasicUIUpdate();
             statusUI.MainUIUpdate();
             isDamaged = false;
@@ -96,7 +99,7 @@ public class PlayerStatus : MonoBehaviour
     IEnumerator ImmotalCorutine()
     {
         yield return new WaitForSeconds(1);
-        gameManager.HpSyncronization();
+        gameManager.currentHpSyncronization();
         playerMove.immortal = false;
     }
     public void ApplyEffect(Item item)
@@ -104,9 +107,9 @@ public class PlayerStatus : MonoBehaviour
         Damage += item.attackBonus;
         maxHp += item.maxHpBonus;
         Hp += item.maxHpBonus;
-
+        startMaxHp += item.startMaxHpBonus;
         Hp += item.hpHeal;
-        if (Hp > maxHp)
+        if (Hp >= maxHp)
         {
             Hp = maxHp;
         }
@@ -116,7 +119,6 @@ public class PlayerStatus : MonoBehaviour
         jumpPower += item.jumpBonus;
         movePower += item.speedBonus;
     }
-
     public void RemoveEffect(Item item)
     {
         Damage -= item.attackBonus;
@@ -136,8 +138,10 @@ public class PlayerStatus : MonoBehaviour
         if (UpgradCount < 1 && gold >= 500)
         {
             gold -= 500;
+            Hp += 2;
             ClassUpgrade();
             gameManager.GoldSyncronization();
+            gameManager.HpSyncronization();
             gameManager.UpgradeSyncronization();
         }
         else if (UpgradCount != 0)
@@ -156,9 +160,8 @@ public class PlayerStatus : MonoBehaviour
     public void ClassUpgrade()
     {
         UpgradCount += 1;
-        Damage = Damage + 20;
         maxHp += 2;
-        Hp += 2;
+        Damage = Damage + 20;
         CritDam += 0.3f;
         CritPer += 20;
         playerMove.dashCooldown -= 1;

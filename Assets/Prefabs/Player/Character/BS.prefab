@@ -70,6 +70,7 @@ MonoBehaviour:
   CritDam: 150
   goldBonus: 0
   gold: 100
+  playerMove: {fileID: 8193237346940618598}
   gameManager: {fileID: 0}
   statusUI: {fileID: 0}
   playerpos: {fileID: 5822260344825245674}
