@@ -188,7 +188,7 @@ public class PlayerStatus : MonoBehaviour
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        gameManager = FindAnyObjectByType<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         playerMove = GetComponent<PlayerMove>();
     }
 }

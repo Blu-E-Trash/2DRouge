@@ -62,7 +62,7 @@ public class PlayerMove : MonoBehaviour
     }
     private void OnEnable()
     {
-        gameManager = FindAnyObjectByType<GameManager>();
+        gameManager = gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
     public void ChangeAnimation()
     {

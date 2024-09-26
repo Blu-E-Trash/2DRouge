@@ -79,14 +79,13 @@ public class EnemyHp : MonoBehaviour
             animator.SetBool("Dead", true);
             HowManyGold();
             playerStatus.gold += Mathf.FloorToInt(playerStatus.goldBonus*HMGold);
-            gameManager.GoldSyncronization();
-            statusUI.BasicUIUpdate();
-            
             isDead = true;
-            if(this.tag == "Boss")
+            if (this.tag == "Boss")
             {
                 isBossDead = true;
             }
+            statusUI.BasicUIUpdate();
+            gameManager.GoldSyncronization();
         }
     }
     private void TurnOffEffect()
@@ -131,6 +130,6 @@ public class EnemyHp : MonoBehaviour
     }
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        gameManager = FindAnyObjectByType<GameManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 }
